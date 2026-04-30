@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - InternHub Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        uber: '#080312',
+                        brand: {
+                            400: '#9f7aea',
+                            500: '#805ad5',
+                            600: '#6b46c1',
+                            700: '#553c9a',
+                            900: '#322659',
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-medium': 'float 6s ease-in-out infinite reverse',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                        'spin-slow': 'spin 12s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) scale(1)' },
+                            '50%': { transform: 'translateY(-15px) scale(1.02)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(139, 92, 246, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(139, 92, 246, 0.7)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #080312; overflow-x: hidden; color: #fff; }
+        
+        .bg-mesh {
+            background-color: #080312;
+            background-image: 
+                radial-gradient(circle at 85% 50%, rgba(107, 70, 193, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 15% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.15) 0%, transparent 40%),
+                radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px;
+            background-position: 0 0, 0 0, 0 0, 20px 20px;
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark-input {
+            background: rgba(10, 5, 20, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .dark-input:focus {
+            background: rgba(10, 5, 20, 0.9);
+            border-color: rgba(167, 139, 250, 0.6);
+            box-shadow: inset 0 0 15px rgba(167, 139, 250, 0.1);
+        }
+
+        .premium-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.4);
+            transition: all 0.3s;
+        }
+        .premium-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -5px rgba(124, 58, 237, 0.6);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #e9d5ff, #c084fc, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05);
+        }
+        .nav-active {
+            background: rgba(124, 58, 237, 0.15);
+            color: #d8b4fe !important;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.1);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        
+        /* Modal dark styling */
+        .modal-glass {
+            background: rgba(15, 10, 25, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,1);
+        }
+    </style>
+</head>
+<body class="m-0 min-h-screen relative pb-12 bg-mesh text-white">
+
+    <!-- Orbs -->
+    <div class="orb bg-brand-600 w-96 h-96 top-[5%] right-[20%] animate-pulse-slow"></div>
+    <div class="orb bg-blue-600 w-80 h-80 bottom-[10%] left-[10%] animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+    <!-- Integrated Dark Navbar -->
+    <nav class="bg-uber/80 backdrop-blur-xl border-b border-white/10 fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-brand-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <i class="fas fa-satellite-dish text-white text-xl"></i>
+                    </div>
+                    <span class="font-display font-bold text-2xl tracking-wide text-white">InternHub</span>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/5">
+                    <a href="/dashboard.html" class="nav-link px-5 py-2.5 rounded-xl text-sm font-medium text-gray-400">
+                        <i class="fas fa-border-all mr-2"></i>Dashboard
+                    </a>
+                    <a href="/profile.html" class="nav-active px-5 py-2.5 rounded-xl text-sm font-bold">
+                        <i class="fas fa-user-astronaut mr-2"></i>Profile
+                    </a>
+                    <a href="/internships.html" class="nav-link px-5 py-2.5 rounded-xl text-sm font-medium text-gray-400">
+                        <i class="fas fa-briefcase mr-2"></i>Internships
+                    </a>
+                    <a href="/applications.html" class="nav-link px-5 py-2.5 rounded-xl text-sm font-medium text-gray-400">
+                        <i class="fas fa-file-contract mr-2"></i>Applications
+                    </a>
+                </div>
+
+                <!-- Action Button -->
+                <button onclick="logout()" class="group flex items-center gap-2 px-5 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition-all">
+                    <i class="fas fa-sign-out-alt text-sm group-hover:scale-110 transition-transform"></i>
+                    <span class="font-semibold text-sm">Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="max-w-7xl mx-auto px-6 pt-32 z-10 relative">
+        
+        <!-- Header Profile Card -->
+        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 mb-10 relative overflow-hidden animate-slide-up">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-brand-600/30 to-transparent rounded-full blur-3xl -z-10 pointer-events-none"></div>
+            
+            <div class="flex flex-col md:flex-row items-center gap-10">
+                <!-- Avatar -->
+                <div class="relative group cursor-pointer">
+                    <div class="absolute -inset-1 bg-gradient-to-tr from-brand-500 to-emerald-400 rounded-[2rem] blur opacity-40 group-hover:opacity-70 transition duration-500"></div>
+                    <div id="profileAvatar" class="relative w-36 h-36 rounded-[2rem] bg-gray-900 border border-white/10 flex items-center justify-center text-5xl font-display font-bold text-white shadow-2xl">
+                        <i class="fas fa-spinner fa-spin text-gray-600"></i>
+                    </div>
+                    <div class="absolute -bottom-3 -right-3 w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-white border-4 border-[#080312] shadow-lg">
+                        <i class="fas fa-check text-sm"></i>
+                    </div>
+                </div>
+                
+                <!-- Info -->
+                <div class="flex-1 text-center md:text-left z-10">
+                    <h1 id="profileName" class="text-4xl md:text-5xl font-display font-bold tracking-tight mb-2">Loading Identity...</h1>
+                    <p id="profileEmail" class="text-brand-300 font-mono text-sm mb-6 uppercase tracking-widest block"></p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-3">
+                        <div class="px-4 py-2 bg-brand-900/50 border border-brand-500/30 rounded-xl flex items-center gap-2">
+                            <i class="fas fa-shield-alt text-brand-400 text-sm"></i>
+                            <span class="text-sm font-bold text-gray-200 uppercase tracking-wider">Role: <span id="profileType" class="text-brand-400">---</span></span>
+                        </div>
+                        <div class="px-4 py-2 bg-green-900/30 border border-green-500/30 rounded-xl flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></div>
+                            <span class="text-sm font-bold text-green-400 uppercase tracking-wider">Status: <span id="profileStatus">Online</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats right side -->
+                <div class="flex gap-4 w-full md:w-auto mt-6 md:mt-0">
+                    <div class="bg-white/5 border border-white/10 p-6 rounded-[2rem] text-center flex-1 min-w-[140px] hover:bg-white/10 transition-colors">
+                        <p id="applicationsCount" class="text-4xl font-display font-extrabold text-white mb-1"><i class="fas fa-circle-notch fa-spin text-lg text-gray-500"></i></p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Dispatches</p>
+                    </div>
+                    <div class="bg-white/5 border border-white/10 p-6 rounded-[2rem] text-center flex-1 min-w-[140px] hover:bg-white/10 transition-colors">
+                        <p id="viewsCount" class="text-4xl font-display font-extrabold text-white mb-1">0</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Network Pings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-10">
+            
+            <!-- Left Column -->
+            <div class="lg:col-span-1 space-y-8">
+                <!-- Personal Info -->
+                <div class="glass-card rounded-[2rem] p-8 relative animate-slide-up" style="animation-delay: 0.1s;">
+                    <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+                        <h3 class="text-xl font-display font-bold flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm border border-blue-500/20"><i class="fas fa-fingerprint"></i></div> 
+                            Core Data
+                        </h3>
+                        <button onclick="editProfile()" class="text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5 p-2.5 rounded-xl transition-all"><i class="fas fa-pen text-sm"></i></button>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2"><i class="fas fa-user-tag text-brand-500"></i> Designated Name</p>
+                            <p id="fullName" class="text-gray-200 font-medium font-display tracking-wide">...</p>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2"><i class="fas fa-envelope text-brand-500"></i> GMAIL</p>
+                            <p id="emailAddress" class="text-gray-200 font-mono text-sm tracking-wide">...</p>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2"><i class="fas fa-calendar-alt text-brand-500"></i> Matrix Entry Date</p>
+                            <p id="memberSince" class="text-gray-200 font-mono text-sm">...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic Info -->
+                <div class="glass-card rounded-[2rem] p-8 animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-sm border border-purple-500/20"><i class="fas fa-university"></i></div> 
+                        <h3 class="text-xl font-display font-bold">Academic Base</h3>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2"><i class="fas fa-barcode text-brand-500"></i> Registry ID</p>
+                            <p id="studentId" class="text-gray-200 font-mono font-medium tracking-wide">N/A</p>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2"><i class="fas fa-microscope text-brand-500"></i> Primary Focus</p>
+                            <p id="major" class="text-gray-200 font-medium">Computer Science</p>
+                        </div>
+                        <div class="bg-black/20 p-4 rounded-xl border border-white/5">
+                            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-1.5 flex items-center gap-2"><i class="fas fa-globe text-brand-500"></i> Institution</p>
+                            <p id="university" class="text-gray-200 font-medium">Global Tech Hub</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Skills Panel -->
+                <div class="glass-card rounded-[2rem] p-8 animate-slide-up" style="animation-delay: 0.15s;">
+                    <div class="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm border border-emerald-500/20"><i class="fas fa-code"></i></div> 
+                        <h3 class="text-xl font-display font-bold">Assimilated Modules</h3>
+                    </div>
+                    <div id="skillsTags" class="flex flex-wrap gap-3 p-2">
+                        <span class="px-4 py-2 bg-white/5 border border-white/10 text-gray-400 rounded-xl font-mono text-sm animate-pulse">Scanning neural pathways...</span>
+                    </div>
+                </div>
+
+                <!-- Grids -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 h-full">
+                    
+                    <!-- Applications Tracker -->
+                    <div class="glass-card rounded-[2rem] p-8 h-full flex flex-col animate-slide-up" style="animation-delay: 0.25s;">
+                        <div class="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
+                            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm border border-amber-500/20"><i class="fas fa-satellite-dish"></i></div> 
+                            <h3 class="text-xl font-display font-bold">Signal Array</h3>
+                        </div>
+                        <div id="applicationsList" class="space-y-4 flex-1">
+                            <div class="bg-black/30 border border-white/5 p-6 rounded-2xl text-center flex flex-col items-center justify-center h-full">
+                                <i class="fas fa-radar text-4xl text-gray-700 mb-4 animate-spin-slow"></i>
+                                <p class="text-gray-400 font-mono text-sm tracking-widest">SCANNING DB</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Allocation -->
+                    <div class="glass-card rounded-[2rem] p-8 h-full relative overflow-hidden animate-slide-up" style="animation-delay: 0.3s;">
+                        <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent pointer-events-none"></div>
+                        <div class="flex items-center gap-3 mb-8 border-b border-white/10 pb-4 relative z-10">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm border border-emerald-500/20"><i class="fas fa-shield-check"></i></div> 
+                            <h3 class="text-xl font-display font-bold text-white">Confirmed Mission</h3>
+                        </div>
+                        <div id="allocationSection" class="relative z-10">
+                            <div class="bg-black/40 border border-white/5 p-6 rounded-2xl text-center flex flex-col items-center justify-center h-40">
+                                <i class="fas fa-hourglass-half text-3xl text-gray-600 mb-3 block animate-pulse"></i>
+                                <p class="text-gray-400 font-medium text-sm tracking-wide uppercase">Awaiting Command Override</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black/50 border-t border-white/10 pt-16 pb-8 mt-12 relative z-10 w-full">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-tr from-brand-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-satellite-dish text-white text-sm"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl tracking-wide text-white">InternHub</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                        InternHub is the premier talent acceleration ecosystem designed to seamlessly match the top emerging tech professionals with industry-leading organizations. Our neural networks analyze your unique skill profile to provide unparalleled access to hyper-relevant roles across the globe. Built for the future of work.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Platform</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/internships.html" class="hover:text-brand-400 transition-colors">Browse Roles</a></li>
+                        <li><a href="/applications.html" class="hover:text-brand-400 transition-colors">Track Applications</a></li>
+                        <li><a href="/profile.html" class="hover:text-brand-400 transition-colors">Upgrade Profile</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Legal & Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/privacy.html" class="hover:text-brand-400 transition-colors">Privacy Directive</a></li>
+                        <li><a href="/terms.html" class="hover:text-brand-400 transition-colors">Terms of Access</a></li>
+                        <li><a href="/contact.html" class="hover:text-brand-400 transition-colors">Contact Command</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-gray-500 font-mono tracking-widest">&copy; 2026 InternHub Ecosystem. All rights reserved.</p>
+                <div class="flex items-center gap-4 text-gray-400">
+                    <a href="https://twitter.com/InternHub" target="_blank" class="hover:text-blue-400 transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://github.com" target="_blank" class="hover:text-gray-400 transition-colors"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hover:text-blue-600 transition-colors"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Shared Chatbot Widget -->
+    <script src="/js/chatbot.js"></script>
+
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="fixed inset-0 bg-[#080312]/80 backdrop-blur-md hidden z-[100] flex items-center justify-center p-4">
+        <div class="modal-glass rounded-[2rem] max-w-[500px] w-full overflow-hidden flex flex-col transform transition-all p-8 relative">
+            
+            <div class="absolute top-0 right-0 w-32 h-32 bg-brand-600/30 rounded-full blur-[40px] pointer-events-none -z-10"></div>
+
+            <div class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+                <h2 class="text-2xl font-display font-bold text-white flex items-center gap-3">
+                    <i class="fas fa-sliders-h text-brand-400"></i> Configure Params
+                </h2>
+                <button onclick="closeEditProfile()" class="text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 w-10 h-10 rounded-xl flex items-center justify-center transition-all border border-white/5">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="editProfileForm" class="space-y-6">
+                <div>
+                    <label class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2 ml-1">Designation</label>
+                    <input type="text" id="editName" name="name" required class="w-full px-5 py-4 dark-input rounded-xl focus:outline-none placeholder-gray-600 font-display">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2 ml-1">GMAIL / Token</label>
+                    <div class="relative flex items-center">
+                        <input type="email" id="editEmail" disabled class="w-full px-5 py-4 bg-black/40 border border-white/5 text-gray-500 rounded-xl cursor-not-allowed">
+                        <div class="absolute right-4 text-emerald-500/50"><i class="fas fa-lock"></i></div>
+                    </div>
+                    <p class="text-[10px] text-red-400/80 mt-2 font-mono ml-1">>>> IMMUTABLE KEY. SYSTEM LOCKED.</p>
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2 ml-1">Sector Assignment</label>
+                    <input type="text" id="editDepartment" name="department" class="w-full px-5 py-4 dark-input rounded-xl focus:outline-none placeholder-gray-600 font-display">
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2 ml-1">Module Injections (Comma Separate)</label>
+                    <input type="text" id="editSkills" name="skills" placeholder="React, Node.js, AI Integration" class="w-full px-5 py-4 dark-input rounded-xl focus:outline-none placeholder-gray-600 font-mono text-sm text-brand-200">
+                </div>
+                
+                <div class="flex gap-4 pt-6 border-t border-white/5 mt-4">
+                    <button type="button" onclick="closeEditProfile()" class="flex-1 px-5 py-4 font-bold text-gray-400 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:text-white transition">Abort</button>
+                    <button type="submit" class="flex-1 px-5 py-4 font-bold text-white premium-btn rounded-xl flex items-center justify-center gap-2 group">
+                        <span>Save State</span>
+                        <i class="fas fa-cloud-upload-alt text-sm group-hover:-translate-y-0.5 transition-transform"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // Check login state and redirect if not logged in
+        const userLoggedInStatus = localStorage.getItem("isLoggedIn");
+        if (userLoggedInStatus !== "true") {
+            window.location.href = "/login.html";
+        }
+
+        function getAuthToken() { return localStorage.getItem('token'); }
+
+        let currentUserData = null;
+
+        // Load profile data
+        async function loadProfileData() {
+            try {
+                const token = getAuthToken();
+                const response = await fetch('/api/auth/profile', { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await response.json();
+
+                if (!data.success) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                currentUserData = data.profile || data;
+
+                document.getElementById('profileName').textContent = data.name || 'ANONYMOUS';
+                document.getElementById('profileEmail').textContent = data.email || 'UNDISCLOSED';
+                document.getElementById('fullName').textContent = data.name || 'ANONYMOUS';
+                document.getElementById('emailAddress').textContent = data.email || 'UNDISCLOSED';
+
+                // Skills styling
+                const skills = data.skills || [];
+                const skillsContainer = document.getElementById('skillsTags');
+                if (skills.length > 0) {
+                    skillsContainer.innerHTML = skills.map(skill =>
+                        `<span class="px-4 py-2 bg-brand-500/10 border border-brand-500/30 text-brand-300 font-mono text-xs tracking-wider rounded-lg shadow-sm cursor-default hover:bg-brand-500/20 hover:text-white transition-colors"><i class="fas fa-microchip mr-1.5 opacity-50"></i>${skill.trim()}</span>`
+                    ).join('');
+                } else {
+                    skillsContainer.innerHTML = `<span class="text-gray-500 font-mono text-xs tracking-widest border border-dashed border-white/20 p-3 rounded-xl w-full text-center">NO MODULES DETECTED</span>`;
+                }
+
+                const user = data.profile || data;
+
+                document.getElementById('profileType').textContent = user.role || 'GUEST';
+
+                // Fancy dark avatar Initials
+                const initials = data.name ? data.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2) : 'XX';
+                document.getElementById('profileAvatar').innerHTML = `<span class="bg-gradient-to-r from-gray-200 to-gray-500 bg-clip-text text-transparent group-hover:from-white group-hover:to-gray-300 transition-colors">${initials}</span>`;
+
+                document.getElementById('memberSince').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString([], { month: 'short', year: 'numeric'}) : '01-Jan-202X';
+
+                if (user.department) document.getElementById('major').textContent = user.department;
+                if (user.registryId && user.registryId !== 'N/A') document.getElementById('studentId').textContent = user.registryId;
+                if (user.institution) document.getElementById('university').textContent = user.institution;
+
+            } catch (error) {
+                console.error('Core failure:', error);
+            }
+        }
+
+        async function loadApplications() {
+            try {
+                const token = getAuthToken();
+                if (!token) return;
+
+                const response = await fetch('/api/applications', { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await response.json();
+                const container = document.getElementById('applicationsList');
+
+                if (!data.success || data.applications.length === 0) {
+                    container.innerHTML = '<div class="bg-black/40 border border-dashed border-white/10 p-6 rounded-2xl text-center"><p class="text-gray-500 font-mono text-xs tracking-widest">NO SIGNALS DETECTED</p></div>';
+                    document.getElementById('applicationsCount').textContent = '0';
+                    return;
+                }
+
+                const applicationsHtml = data.applications.slice(0, 3).map(app => {
+                    let statusCol = "text-yellow-400 bg-yellow-500/10 border-yellow-500/30";
+                    let icon = "fa-hourglass-start";
+                    if(app.status === 'approved' || app.status === 'selected') {
+                        statusCol = "text-green-400 bg-green-500/10 border-green-500/30 shadow-[0_0_10px_rgba(74,222,128,0.2)]";
+                        icon = "fa-check-double";
+                    }
+                    if(app.status === 'rejected') {
+                        statusCol = "text-red-400 bg-red-500/10 border-red-500/30";
+                        icon = "fa-times";
+                    }
+                    
+                    return `
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-2xl hover:bg-white/10 hover:border-brand-500/30 transition-all cursor-crosshair relative overflow-hidden group">
+                            <div class="absolute left-0 top-0 h-full w-1 bg-white/10 group-hover:bg-brand-500 transition-colors"></div>
+                            <div class="flex justify-between items-start mb-3 pl-2">
+                                <div>
+                                    <h4 class="font-display font-bold text-white text-lg tracking-wide">${app.internship?.title || 'Classified'}</h4>
+                                    <p class="text-brand-400 text-xs font-mono font-bold tracking-widest"><i class="fas fa-building mr-1"></i>${app.internship?.company || 'Unknown Corp'}</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center mt-3 pl-2 border-t border-white/5 pt-3">
+                                <p class="text-gray-500 text-[10px] font-mono tracking-widest uppercase"><i class="fas fa-terminal text-gray-600 mr-2"></i> ${new Date(app.appliedAt).toLocaleDateString()}</p>
+                                <span class="px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest border ${statusCol} flex items-center gap-1.5">
+                                    <i class="fas ${icon}"></i> ${app.status}
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = applicationsHtml;
+                document.getElementById('applicationsCount').textContent = data.applications.length;
+
+            } catch (error) {
+                console.error('Signal intercept failed:', error);
+            }
+        }
+
+        async function loadAllocation() {
+            try {
+                const token = getAuthToken();
+                if (!token) return;
+
+                const response = await fetch('/api/applications/my-allocation', { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await response.json();
+                const container = document.getElementById('allocationSection');
+
+                if (!data.success || !data.allocated) {
+                    return; // Keeps default HTML "Awaiting Override"
+                }
+
+                const allocation = data.allocation;
+                const internship = allocation.internship;
+
+                container.innerHTML = `
+                    <div class="bg-gradient-to-br from-[#0a1510] to-[#040a07] border border-emerald-500/30 rounded-2xl p-6 shadow-[0_10px_30px_rgba(16,185,129,0.1)] relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')] opacity-20 z-0"></div>
+                        <div class="absolute -right-10 -top-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-start justify-between mb-5">
+                                <div>
+                                    <span class="text-emerald-400 font-mono font-bold text-[10px] tracking-[0.2em] uppercase block mb-2 flex items-center gap-2"><i class="fas fa-shield-check text-sm"></i> Command Access Granted</span>
+                                    <h4 class="font-display font-extrabold text-white text-2xl tracking-wide">${internship?.title || 'Unknown'}</h4>
+                                    <p class="text-brand-300 font-bold font-mono text-sm mt-1 uppercase tracking-wider">@ ${internship?.company || 'Unknown Sector'}</p>
+                                </div>
+                            </div>
+                            <div class="space-y-2.5 text-xs text-gray-300 font-mono tracking-widest bg-black/40 border border-white/5 p-4 rounded-xl">
+                                <p class="flex items-center gap-3"><i class="fas fa-map-marker-alt text-brand-500 w-4"></i> ${internship?.location || 'Remote Node'}</p>
+                                <p class="flex items-center gap-3"><i class="fas fa-coins text-emerald-500 w-4"></i> ${internship?.stipend || 'Unpaid'}</p>
+                                ${allocation.startDate ? `<p class="flex items-center gap-3"><i class="fas fa-power-off text-amber-500 w-4"></i> INIT SYNC: <span class="text-white">${new Date(allocation.startDate).toLocaleDateString()}</span></p>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Final match extraction failed:', error);
+            }
+        }
+
+        // Modals Code
+        function editProfile() {
+            if (!currentUserData) return;
+            document.getElementById('editName').value = currentUserData.name || '';
+            document.getElementById('editEmail').value = currentUserData.email || '';
+            document.getElementById('editDepartment').value = currentUserData.department || '';
+            document.getElementById('editSkills').value = currentUserData.skills ? currentUserData.skills.join(', ') : '';
+            document.getElementById('editProfileModal').classList.remove('hidden');
+        }
+
+        function closeEditProfile() {
+            document.getElementById('editProfileModal').classList.add('hidden');
+        }
+
+        document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalHTML = submitBtn.innerHTML;
+            submitBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> <span>Deploying...</span>`;
+            submitBtn.disabled = true;
+
+            try {
+                const profileData = {
+                    name: document.getElementById('editName').value.trim(),
+                    department: document.getElementById('editDepartment').value.trim(),
+                    skills: document.getElementById('editSkills').value.split(',').map(s => s.trim()).filter(s => s)
+                };
+
+                const res = await fetch('/api/auth/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${getAuthToken()}`
+                    },
+                    body: JSON.stringify(profileData)
+                });
+                
+                closeEditProfile();
+                await loadProfileData();
+
+            } catch (error) {
+                console.error('Update aborted:', error);
+            } finally {
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+            }
+        });
+
+        async function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("token");
+            window.location.href = "/login.html";
+        }
+
+        window.onload = function() {
+            loadProfileData();
+            loadApplications();
+            loadAllocation();
+            document.getElementById('viewsCount').textContent = Math.floor(Math.random() * 200) + 40;
+        };
+    </script>
+</body>
+</html>

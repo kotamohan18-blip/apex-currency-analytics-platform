@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Login</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        input { padding: 10px; margin: 10px; width: 300px; }
+        button { padding: 10px 20px; margin: 10px; }
+        .message { padding: 10px; margin: 10px; border-radius: 5px; }
+        .success { background: green; color: white; }
+        .error { background: red; color: white; }
+    </style>
+</head>
+<body>
+    <h1>Simple Test Login</h1>
+    <form onsubmit="testLogin(event)">
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="password" id="password" placeholder="Password" required><br>
+        <button type="submit">Test Login</button>
+    </form>
+    
+    <div id="message" class="message" style="display:none;"></div>
+    
+    <h3>Demo Credentials:</h3>
+    <p>Admin: admin@internship.com / admin123</p>
+    <p>Student: student@internship.com / student123</p>
+    
+    <script>
+        async function testLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            console.log('Testing login with:', email, password);
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    messageDiv.textContent = 'Login successful! User: ' + data.user.email;
+                    messageDiv.className = 'message success';
+                } else {
+                    messageDiv.textContent = 'Login failed: ' + (data.message || 'Unknown error');
+                    messageDiv.className = 'message error';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                messageDiv.textContent = 'Network error: ' + error.message;
+                messageDiv.className = 'message error';
+            }
+            
+            messageDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

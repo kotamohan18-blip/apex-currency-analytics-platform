@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internships - InternHub</title>
+    <link rel="icon" href="data:,">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fce7f3; background-image: radial-gradient(at 40% 20%, hsla(253,16%,7%,1) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%), radial-gradient(at 80% 50%, hsla(340,100%,76%,1) 0px, transparent 50%), radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%), radial-gradient(at 80% 100%, hsla(242,100%,70%,1) 0px, transparent 50%), radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%); background-attachment: fixed; }
+        h1, h2, h3, .nav-logo { font-family: 'Outfit', sans-serif; }
+        
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Unstop Modal styling */
+        .modal-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
+            animation: modalFadeIn 0.4s ease-out forwards;
+        }
+        
+        @keyframes modalFadeIn {
+            0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        /* Smooth application gradient button */
+        .apply-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            transition: all 0.3s ease;
+        }
+        .apply-btn:hover {
+            background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body class="m-0 min-h-screen">
+
+<!-- Navbar -->
+<nav class="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
+                    <i class="fas fa-graduation-cap text-white text-lg"></i>
+                </div>
+                <span class="nav-logo font-bold text-2xl text-gray-900 tracking-tight">InternHub</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex items-center gap-2">
+                <a href="/dashboard.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </a>
+                <a href="/profile.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                    <i class="fas fa-user mr-2"></i>Profile
+                </a>
+                <a href="/internships.html" class="px-4 py-2 rounded-lg text-sm font-bold text-indigo-700 bg-indigo-50/80 shadow-sm border border-indigo-100 transition">
+                    <i class="fas fa-briefcase mr-2"></i>Internships
+                </a>
+                <a href="/applications.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                    <i class="fas fa-file-alt mr-2"></i>Applications
+                </a>
+            </div>
+
+            <!-- Logout Button -->
+            <button onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50/80 rounded-lg transition">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Main -->
+<div class="p-6 pt-28 max-w-7xl mx-auto z-10 relative">
+    <div class="flex flex-col items-center mb-12 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 drop-shadow-sm tracking-tight text-white mix-blend-difference">Discover Premium Roles</h1>
+        <p class="text-lg text-gray-900/80 font-medium max-w-2xl bg-white/40 p-2 rounded-xl backdrop-blur-sm">Fast track your career with exclusive opportunities from Fortune 500 companies.</p>
+    </div>
+
+    <!-- Cards injected here -->
+    <div id="internshipsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-10"></div>
+</div>
+
+<!-- ========================================== -->
+<!-- UNSTOP-LIKE COMPLEX APPLICATION MODAL      -->
+<!-- ========================================== -->
+<div id="applicationModal" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-[2px] flex items-center justify-center p-4 z-[100] transition-opacity">
+    <div class="modal-glass rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+        <!-- Modal Header -->
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gradient-to-r from-indigo-50/50 to-white">
+            <div>
+                <span class="text-indigo-600 font-medium text-sm tracking-wider uppercase mb-1 block">Application Process</span>
+                <h2 id="modalJobTitle" class="text-2xl font-bold text-gray-900 leading-tight">Software Engineering Intern</h2>
+                <p id="modalCompanyName" class="text-gray-500 font-medium text-sm flex items-center gap-2 mt-1">
+                    <i class="fas fa-building text-gray-400"></i> Google
+                </p>
+            </div>
+            <button onclick="closeModal()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-400 transition-colors">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <!-- Modal Body (Scrollable) -->
+        <div class="p-6 overflow-y-auto custom-scrollbar flex-1">
+            <form id="applyForm" class="space-y-6">
+                <!-- Resume Upload Block -->
+                <div class="bg-indigo-50/50 p-5 rounded-xl border border-indigo-100 border-dashed relative">
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">
+                        <i class="fas fa-cloud-upload-alt text-indigo-500 mr-2"></i>Upload Latest Resume (PDF)
+                    </label>
+                    <input type="file" id="resumeUpload" accept=".pdf" class="block w-full text-sm text-gray-500
+                        file:mr-4 file:py-2.5 file:px-4
+                        file:rounded-lg file:border-0
+                        file:text-sm file:font-semibold
+                        file:bg-indigo-600 file:text-white
+                        hover:file:bg-indigo-700
+                        transition-all cursor-pointer bg-white rounded-lg border border-gray-200">
+                    <p class="text-xs text-gray-400 mt-2">Max file size 5MB. Must be .pdf format.</p>
+                </div>
+                
+                <!-- Questionnaire Block -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">Why should you be hired for this role?</label>
+                    <textarea id="whyHireMe" rows="4" class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm" placeholder="Highlight your relevant experience, projects, or passions..." required></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">Key Technical Skills</label>
+                    <input id="skillsInput" type="text" class="w-full p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition shadow-sm text-sm" placeholder="e.g. Python, React, AWS, MongoDB" required>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Modal Footer -->
+        <div class="p-6 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
+            <p id="applyErrorMsg" class="text-red-500 font-medium text-sm hidden"></p>
+            <div class="flex gap-3 ml-auto">
+                <button onclick="closeModal()" class="px-6 py-2.5 rounded-xl text-gray-600 font-medium hover:bg-gray-200 transition">Cancel</button>
+                <button id="finalSubmitBtn" onclick="submitApplication()" class="apply-btn text-white px-8 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-300 flex items-center gap-2">
+                    Submit Application <i class="fas fa-arrow-right text-sm"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+let activeInternshipId = null;
+
+// Ensure Protection
+if (!token) {
+    window.location.href = "/login.html";
+}
+
+document.addEventListener("DOMContentLoaded", loadInternships);
+
+async function loadInternships() {
+    try {
+        const [internshipsRes, applicationsRes] = await Promise.all([
+            fetch("/api/internships"),
+            fetch("/api/applications", {
+                headers: { "Authorization": "Bearer " + token }
+            })
+        ]);
+
+        const internshipsData = await internshipsRes.json();
+        const applicationsData = await applicationsRes.json();
+
+        const container = document.getElementById("internshipsContainer");
+        container.innerHTML = "";
+
+        if (!internshipsData.internships || internshipsData.internships.length === 0) {
+            container.innerHTML = "<p class='text-center text-gray-700 w-full col-span-full py-20 bg-white/50 backdrop-blur-sm rounded-2xl'>No premium internships actively available right now.</p>";
+            return;
+        }
+
+        const appliedIds = new Set(
+            (applicationsData.applications || []).map(a => a.internshipId || a.internship?._id || a.internship)
+        );
+
+        internshipsData.internships.forEach(internship => {
+            const isApplied = appliedIds.has(internship._id.toString());
+            const div = document.createElement("div");
+            
+            // Apply Glassmorphism design system to generic card
+            div.className = "glass-card p-6 rounded-2xl flex flex-col h-full relative overflow-hidden group";
+
+            // Decorator top line
+            const decoration = `<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>`;
+
+            div.innerHTML = `
+                ${decoration}
+                <div class="flex-1">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 text-xl shadow-inner">🏢</div>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold ${isApplied ? 'bg-green-100 text-green-800' : 'bg-blue-50 text-blue-700 border border-blue-100'}">
+                            ${isApplied ? '<i class="fas fa-check mr-1"></i> Applied' : 'Accepting'}
+                        </span>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold text-gray-900 mb-1 leading-tight">${internship.title}</h3>
+                    <p class="text-indigo-600 font-semibold mb-3 text-sm">${internship.company}</p>
+                    
+                    <div class="space-y-2 mb-6">
+                        <p class="text-sm text-gray-600 flex items-center font-medium"><i class="fas fa-map-marker-alt w-5 text-gray-400"></i> ${internship.location || "Remote"}</p>
+                        <p class="text-sm text-gray-600 flex items-center font-medium"><i class="fas fa-briefcase w-5 text-gray-400"></i> ${internship.duration || "N/A"}</p>
+                        <p class="text-sm text-green-600 flex items-center font-bold bg-green-50 w-fit px-2 py-1 rounded"><i class="fas fa-money-bill w-5 text-green-500"></i> ${internship.stipend || "Unpaid"}</p>
+                    </div>
+                </div>
+
+                ${
+                    isApplied
+                    ? `<button disabled class="mt-auto w-full bg-gray-100 text-gray-400 font-bold px-4 py-3 rounded-xl border border-gray-200 cursor-not-allowed">
+                        Already Submitted
+                       </button>`
+                    : `<button onclick="openModal('${internship._id}', '${internship.title.replace(/'/g, "\\'")}', '${internship.company.replace(/'/g, "\\'")}')"
+                        class="mt-auto w-full apply-btn text-white font-bold px-4 py-3 rounded-xl shadow-lg shadow-indigo-200/50 flex items-center justify-center gap-2">
+                        Apply Now <i class="fas fa-plane-departure"></i>
+                       </button>`
+                }
+            `;
+
+            container.appendChild(div);
+        });
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+// ---------- UNSTOP MODAL LOGIC ----------
+
+function openModal(internshipId, title, company) {
+    activeInternshipId = internshipId;
+    document.getElementById("modalJobTitle").textContent = title;
+    document.getElementById("modalCompanyName").innerHTML = `<i class="fas fa-building text-gray-400"></i> ${company}`;
+    
+    // Reset forms
+    document.getElementById("whyHireMe").value = "";
+    document.getElementById("skillsInput").value = "";
+    document.getElementById("resumeUpload").value = "";
+    document.getElementById("applyErrorMsg").classList.add("hidden");
+    
+    // Show Modal
+    const modal = document.getElementById("applicationModal");
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden"; // Prevent background scrolling
+}
+
+function closeModal() {
+    activeInternshipId = null;
+    const modal = document.getElementById("applicationModal");
+    modal.classList.add("hidden");
+    document.body.style.overflow = "auto";
+}
+
+async function submitApplication() {
+    const errorMsg = document.getElementById("applyErrorMsg");
+    const btn = document.getElementById("finalSubmitBtn");
+    
+    const whyHire = document.getElementById("whyHireMe").value.trim();
+    const skills = document.getElementById("skillsInput").value.trim();
+    const resumeFile = document.getElementById("resumeUpload").files[0];
+    
+    // Basic validations
+    if (!resumeFile) {
+        errorMsg.textContent = "Please upload your resume (PDF only).";
+        errorMsg.classList.remove("hidden");
+        return;
+    }
+    if (!whyHire || !skills) {
+        errorMsg.textContent = "Please complete the entire questionnaire.";
+        errorMsg.classList.remove("hidden");
+        return;
+    }
+    
+    errorMsg.classList.add("hidden");
+    btn.disabled = true;
+    const oldHtml = btn.innerHTML;
+    btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Processing...`;
+    
+    try {
+        // Technically, a real backend expects a multipart/form-data for file uploads,
+        // but for this overhaul, we will safely submit via JSON to the existing mock application route.
+        // We simulate reading the PDF for the "Unstop" feel.
+        
+        const response = await fetch("/api/applications/apply", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({
+                internshipId: activeInternshipId,
+                whyHire: whyHire,
+                skills: skills,
+                resumeFileName: resumeFile.name
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+            btn.innerHTML = `<i class="fas fa-check"></i> Submitting...`;
+            btn.className = "bg-green-500 text-white px-8 py-2.5 rounded-xl font-bold shadow-lg shadow-green-300 transition-all";
+            
+            // Allow user to see success
+            setTimeout(() => {
+                closeModal();
+                loadInternships(); // Refresh data grid natively smoothly
+            }, 1200);
+        } else {
+            errorMsg.textContent = data.message || "Failed to apply.";
+            errorMsg.classList.remove("hidden");
+            btn.disabled = false;
+            btn.innerHTML = oldHtml;
+        }
+
+    } catch (err) {
+        errorMsg.textContent = "Network error. Please try again later.";
+        errorMsg.classList.remove("hidden");
+        btn.disabled = false;
+    }
+}
+</script>
+
+<!-- Footer -->
+    <footer class="bg-black/80 border-t border-gray-800 pt-16 pb-8 mt-12 relative z-10 w-full text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-satellite-dish text-white text-sm"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl tracking-wide text-white">InternHub</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                        InternHub is the premier talent acceleration ecosystem designed to seamlessly match the top emerging tech professionals with industry-leading organizations. Our neural networks analyze your unique skill profile to provide unparalleled access to hyper-relevant roles across the globe. Built for the future of work.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Platform</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/internships.html" class="hover:text-blue-400 transition-colors">Browse Roles</a></li>
+                        <li><a href="/applications.html" class="hover:text-blue-400 transition-colors">Track Applications</a></li>
+                        <li><a href="/profile.html" class="hover:text-blue-400 transition-colors">Upgrade Profile</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Legal & Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/privacy.html" class="hover:text-blue-400 transition-colors">Privacy Directive</a></li>
+                        <li><a href="/terms.html" class="hover:text-blue-400 transition-colors">Terms of Access</a></li>
+                        <li><a href="/contact.html" class="hover:text-blue-400 transition-colors">Contact Command</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-gray-500 font-mono tracking-widest">&copy; 2026 InternHub Ecosystem. All rights reserved.</p>
+                <div class="flex items-center gap-4 text-gray-400">
+                    <a href="https://twitter.com/InternHub" target="_blank" class="hover:text-blue-400 transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://github.com" target="_blank" class="hover:text-gray-400 transition-colors"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hover:text-blue-600 transition-colors"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shared Chatbot Widget -->
+    <script src="/js/chatbot.js"></script>
+
+<script>
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "/login.html";
+}
+</script>
+
+</body>
+</html>

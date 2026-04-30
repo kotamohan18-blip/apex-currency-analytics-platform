@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - InternHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/admin-panel.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+            <span class="brand-text">InternHub</span>
+            <span class="brand-badge">Admin</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                <i class="fas fa-th-large"></i><span>Dashboard</span>
+            </a>
+            <a href="#students" class="nav-item" data-page="students">
+                <i class="fas fa-user-graduate"></i><span>Students</span>
+                <span class="nav-count" id="navStudentCount">0</span>
+            </a>
+            <a href="#internships" class="nav-item" data-page="internships">
+                <i class="fas fa-briefcase"></i><span>Internships</span>
+                <span class="nav-count" id="navInternshipCount">0</span>
+            </a>
+            <a href="#applications" class="nav-item" data-page="applications">
+                <i class="fas fa-file-alt"></i><span>Applications</span>
+                <span class="nav-count" id="navAppCount">0</span>
+            </a>
+            <a href="#allocations" class="nav-item" data-page="allocations">
+                <i class="fas fa-check-double"></i><span>Allocations</span>
+                <span class="nav-count" id="navAllocCount">0</span>
+            </a>
+            <a href="#reports" class="nav-item" data-page="reports">
+                <i class="fas fa-chart-bar"></i><span>Reports</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <div class="admin-avatar"><i class="fas fa-user-shield"></i></div>
+                <div class="admin-info">
+                    <span class="admin-name" id="adminName">Admin</span>
+                    <span class="admin-role">Administrator</span>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-wrap">
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+            <div class="topbar-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search anything..." id="globalSearch">
+            </div>
+            <div class="topbar-actions">
+                <span class="live-clock" id="liveClock"></span>
+                <button class="icon-btn" onclick="refreshAll()"><i class="fas fa-sync-alt"></i></button>
+            </div>
+        </header>
+
+        <!-- Pages -->
+        <!-- ========== DASHBOARD ========== -->
+        <section id="dashboard" class="page active">
+            <div class="page-title">
+                <h1>Dashboard Overview</h1>
+                <p>Real-time system metrics</p>
+            </div>
+            <div class="kpi-grid">
+                <div class="kpi-card kpi-purple"><div class="kpi-icon"><i class="fas fa-user-graduate"></i></div><div class="kpi-data"><h2 id="kpiStudents">—</h2><p>Students</p></div></div>
+                <div class="kpi-card kpi-blue"><div class="kpi-icon"><i class="fas fa-briefcase"></i></div><div class="kpi-data"><h2 id="kpiInternships">—</h2><p>Internships</p></div></div>
+                <div class="kpi-card kpi-amber"><div class="kpi-icon"><i class="fas fa-file-alt"></i></div><div class="kpi-data"><h2 id="kpiApplications">—</h2><p>Applications</p></div></div>
+                <div class="kpi-card kpi-green"><div class="kpi-icon"><i class="fas fa-check-double"></i></div><div class="kpi-data"><h2 id="kpiAllocations">—</h2><p>Allocations</p></div></div>
+                <div class="kpi-card kpi-rose"><div class="kpi-icon"><i class="fas fa-clock"></i></div><div class="kpi-data"><h2 id="kpiPending">—</h2><p>Pending</p></div></div>
+                <div class="kpi-card kpi-teal"><div class="kpi-icon"><i class="fas fa-thumbs-up"></i></div><div class="kpi-data"><h2 id="kpiApproved">—</h2><p>Approved</p></div></div>
+            </div>
+            <div class="dash-grid">
+                <div class="card"><div class="card-head"><h3>Recent Applications</h3></div><div class="card-body" id="recentAppsList"><div class="empty-state"><i class="fas fa-inbox"></i><p>Loading...</p></div></div></div>
+                <div class="card"><div class="card-head"><h3>Latest Students</h3></div><div class="card-body" id="recentStudentsList"><div class="empty-state"><i class="fas fa-users"></i><p>Loading...</p></div></div></div>
+            </div>
+        </section>
+
+        <!-- ========== STUDENTS ========== -->
+        <section id="students" class="page">
+            <div class="page-title"><h1>Student Management</h1><p>View and manage all registered students</p></div>
+            <div class="toolbar">
+                <div class="toolbar-search"><i class="fas fa-search"></i><input type="text" placeholder="Search by name or email..." id="studentSearchInput" oninput="filterStudents()"></div>
+                <div class="toolbar-meta"><span id="studentMeta">0 students</span></div>
+            </div>
+            <div class="table-wrap">
+                <table><thead><tr><th>Name</th><th>Email</th><th>Department</th><th>Institution</th><th>Skills</th><th>Joined</th><th>Actions</th></tr></thead>
+                <tbody id="studentsBody"><tr><td colspan="7" class="empty-cell">Loading...</td></tr></tbody></table>
+            </div>
+        </section>
+
+        <!-- ========== INTERNSHIPS ========== -->
+        <section id="internships" class="page">
+            <div class="page-title"><h1>Internship Management</h1><p>All posted internship opportunities</p></div>
+            <div class="toolbar">
+                <div class="toolbar-search"><i class="fas fa-search"></i><input type="text" placeholder="Search internships..." id="internshipSearchInput" oninput="filterInternships()"></div>
+                <div class="toolbar-meta"><span id="internshipMeta">0 internships</span></div>
+            </div>
+            <div class="table-wrap">
+                <table><thead><tr><th>Title</th><th>Company</th><th>Location</th><th>Duration</th><th>Stipend</th><th>Slots</th><th>Applications</th><th>Status</th></tr></thead>
+                <tbody id="internshipsBody"><tr><td colspan="8" class="empty-cell">Loading...</td></tr></tbody></table>
+            </div>
+        </section>
+
+        <!-- ========== APPLICATIONS ========== -->
+        <section id="applications" class="page">
+            <div class="page-title"><h1>Applications Management</h1><p>Review and process student applications</p></div>
+            <div class="toolbar">
+                <div class="filter-tabs">
+                    <button class="ftab active" data-filter="all" onclick="setAppFilter('all')">All</button>
+                    <button class="ftab" data-filter="pending" onclick="setAppFilter('pending')">Pending</button>
+                    <button class="ftab" data-filter="approved" onclick="setAppFilter('approved')">Approved</button>
+                    <button class="ftab" data-filter="rejected" onclick="setAppFilter('rejected')">Rejected</button>
+                </div>
+                <div class="toolbar-meta"><span id="appMeta">0 applications</span></div>
+            </div>
+            <div class="table-wrap">
+                <table><thead><tr><th>Student</th><th>Internship</th><th>Company</th><th>Applied</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="applicationsBody"><tr><td colspan="6" class="empty-cell">Loading...</td></tr></tbody></table>
+            </div>
+        </section>
+
+        <!-- ========== ALLOCATIONS ========== -->
+        <section id="allocations" class="page">
+            <div class="page-title"><h1>Allocation Records</h1><p>Student-internship allocation assignments</p></div>
+            <div class="toolbar"><div class="toolbar-meta"><span id="allocMeta">0 allocations</span></div></div>
+            <div class="table-wrap">
+                <table><thead><tr><th>Student</th><th>Email</th><th>Internship</th><th>Company</th><th>Allocated On</th></tr></thead>
+                <tbody id="allocationsBody"><tr><td colspan="5" class="empty-cell">Loading...</td></tr></tbody></table>
+            </div>
+        </section>
+
+        <!-- ========== REPORTS ========== -->
+        <section id="reports" class="page">
+            <div class="page-title"><h1>Reports & Analytics</h1><p>System-wide analytics and data export</p></div>
+            <div class="reports-grid">
+                <div class="report-card" onclick="exportCSV('students')"><div class="report-icon purple"><i class="fas fa-user-graduate"></i></div><h3>Student Report</h3><p>Export all registered students data</p><span class="report-action"><i class="fas fa-download"></i> Export CSV</span></div>
+                <div class="report-card" onclick="exportCSV('internships')"><div class="report-icon blue"><i class="fas fa-briefcase"></i></div><h3>Internship Report</h3><p>Export all internship listings data</p><span class="report-action"><i class="fas fa-download"></i> Export CSV</span></div>
+                <div class="report-card" onclick="exportCSV('applications')"><div class="report-icon amber"><i class="fas fa-file-alt"></i></div><h3>Application Report</h3><p>Export all application records</p><span class="report-action"><i class="fas fa-download"></i> Export CSV</span></div>
+                <div class="report-card" onclick="exportCSV('allocations')"><div class="report-icon green"><i class="fas fa-check-double"></i></div><h3>Allocation Report</h3><p>Export finalized allocation records</p><span class="report-action"><i class="fas fa-download"></i> Export CSV</span></div>
+            </div>
+            <div class="card" style="margin-top:1.5rem"><div class="card-head"><h3>Quick Stats Summary</h3></div><div class="card-body" id="reportSummary"><p>Loading report data...</p></div></div>
+        </section>
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+    // ===== GLOBALS =====
+    const TOKEN = localStorage.getItem('token');
+    let allStudents=[], allInternships=[], allApplications=[], allAllocations=[];
+    let appFilter='all';
+
+    // ===== AUTH =====
+    if(!TOKEN && !localStorage.getItem('isLoggedIn')){window.location.href='/login';}
+    function logout(){localStorage.clear();window.location.href='/login';}
+    function headers(){return {'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'};}
+
+    // ===== NAVIGATION =====
+    document.querySelectorAll('.nav-item').forEach(el=>{
+        el.addEventListener('click',function(e){
+            e.preventDefault();
+            document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+            this.classList.add('active');
+            const page=this.dataset.page;
+            document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+            document.getElementById(page).classList.add('active');
+            window.location.hash=page;
+        });
+    });
+    // Hash routing
+    window.addEventListener('hashchange',()=>{
+        const h=location.hash.replace('#','');
+        if(h){
+            document.querySelectorAll('.nav-item').forEach(n=>{n.classList.toggle('active',n.dataset.page===h);});
+            document.querySelectorAll('.page').forEach(p=>{p.classList.toggle('active',p.id===h);});
+        }
+    });
+
+    // ===== CLOCK =====
+    function updateClock(){const d=new Date();document.getElementById('liveClock').textContent=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
+    setInterval(updateClock,1000);updateClock();
+
+    // ===== TOAST =====
+    function toast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3000);}
+
+    // ===== SIDEBAR TOGGLE =====
+    function toggleSidebar(){document.getElementById('sidebar').classList.toggle('collapsed');}
+
+    // ===== API CALLS =====
+    async function fetchStats(){
+        try{const r=await fetch('/api/admin/stats',{headers:headers()});const d=await r.json();
+        if(d.success){const s=d.stats;
+            document.getElementById('kpiStudents').textContent=s.totalStudents;
+            document.getElementById('kpiInternships').textContent=s.totalInternships;
+            document.getElementById('kpiApplications').textContent=s.totalApplications;
+            document.getElementById('kpiAllocations').textContent=s.totalAllocations;
+            document.getElementById('kpiPending').textContent=s.pendingApplications;
+            document.getElementById('kpiApproved').textContent=s.approvedApplications;
+            document.getElementById('navStudentCount').textContent=s.totalStudents;
+            document.getElementById('navInternshipCount').textContent=s.totalInternships;
+            document.getElementById('navAppCount').textContent=s.totalApplications;
+            document.getElementById('navAllocCount').textContent=s.totalAllocations;
+        }}catch(e){console.error(e);}
+    }
+
+    async function fetchStudents(){
+        try{const r=await fetch('/api/admin/users',{headers:headers()});const d=await r.json();
+        if(d.success){allStudents=d.users.filter(u=>u.role==='student');renderStudents();}}catch(e){console.error(e);}
+    }
+
+    async function fetchInternships(){
+        try{const r=await fetch('/api/admin/internships',{headers:headers()});const d=await r.json();
+        if(d.success){allInternships=d.internships;renderInternships();}}catch(e){console.error(e);}
+    }
+
+    async function fetchApplications(){
+        try{const r=await fetch('/api/admin/applications',{headers:headers()});const d=await r.json();
+        if(d.success){allApplications=d.applications;renderApplications();renderRecentApps();}}catch(e){console.error(e);}
+    }
+
+    async function fetchAllocations(){
+        try{const r=await fetch('/api/admin/allocations',{headers:headers()});const d=await r.json();
+        if(d.success){allAllocations=d.allocations;renderAllocations();}}catch(e){console.error(e);}
+    }
+
+    // ===== RENDERERS =====
+    function renderStudents(){
+        const tb=document.getElementById('studentsBody');
+        const list=allStudents;
+        document.getElementById('studentMeta').textContent=list.length+' students';
+        if(!list.length){tb.innerHTML='<tr><td colspan="7" class="empty-cell">No students found</td></tr>';renderRecentStudents();return;}
+        tb.innerHTML=list.map(u=>`<tr>
+            <td><div class="cell-user"><div class="cell-avatar">${(u.name||'?')[0].toUpperCase()}</div><strong>${u.name||'—'}</strong></div></td>
+            <td>${u.email||'—'}</td><td>${u.department||'—'}</td><td>${u.institution||'—'}</td>
+            <td>${(u.skills||[]).slice(0,3).map(s=>'<span class="chip">'+s+'</span>').join('')||'—'}</td>
+            <td>${u.createdAt?new Date(u.createdAt).toLocaleDateString():'—'}</td>
+            <td><button class="act-btn danger" onclick="deleteUser('${u._id}')"><i class="fas fa-trash"></i></button></td>
+        </tr>`).join('');
+        renderRecentStudents();
+    }
+
+    function renderRecentStudents(){
+        const el=document.getElementById('recentStudentsList');
+        const recent=allStudents.slice(0,5);
+        if(!recent.length){el.innerHTML='<div class="empty-state"><i class="fas fa-users"></i><p>No students yet</p></div>';return;}
+        el.innerHTML=recent.map(u=>`<div class="mini-row"><div class="cell-avatar sm">${(u.name||'?')[0].toUpperCase()}</div><div><strong>${u.name}</strong><small>${u.email}</small></div><span class="chip">${u.department||'N/A'}</span></div>`).join('');
+    }
+
+    function renderInternships(){
+        const tb=document.getElementById('internshipsBody');
+        document.getElementById('internshipMeta').textContent=allInternships.length+' internships';
+        if(!allInternships.length){tb.innerHTML='<tr><td colspan="8" class="empty-cell">No internships found</td></tr>';return;}
+        tb.innerHTML=allInternships.map(i=>`<tr>
+            <td><strong>${i.title}</strong></td><td>${i.company}</td><td>${i.location||'—'}</td>
+            <td>${i.duration||'—'}</td><td>${i.stipend||'—'}</td>
+            <td><span class="chip">${i.availableSlots}/${i.slots}</span></td>
+            <td>${i.applicationCount||0}</td>
+            <td><span class="badge ${i.isActive?'badge-green':'badge-red'}">${i.isActive?'Active':'Closed'}</span></td>
+        </tr>`).join('');
+    }
+
+    function renderApplications(){
+        const tb=document.getElementById('applicationsBody');
+        let list=allApplications;
+        if(appFilter!=='all') list=list.filter(a=>a.status===appFilter);
+        document.getElementById('appMeta').textContent=list.length+' applications';
+        if(!list.length){tb.innerHTML='<tr><td colspan="6" class="empty-cell">No applications found</td></tr>';return;}
+        tb.innerHTML=list.map(a=>{
+            const isPending=a.status==='pending';
+            return `<tr>
+                <td><div class="cell-user"><div class="cell-avatar sm">${(a.user?.name||'?')[0].toUpperCase()}</div><div><strong>${a.user?.name||'—'}</strong><small>${a.user?.email||''}</small></div></div></td>
+                <td>${a.internship?.title||'—'}</td><td>${a.internship?.company||'—'}</td>
+                <td>${new Date(a.appliedAt).toLocaleDateString()}</td>
+                <td><span class="badge badge-${a.status==='approved'?'green':a.status==='rejected'?'red':'amber'}">${a.status}</span></td>
+                <td>${isPending?`<button class="act-btn success" onclick="approveApp('${a.id}')"><i class="fas fa-check"></i></button><button class="act-btn danger" onclick="rejectApp('${a.id}')"><i class="fas fa-times"></i></button>`:'<span class="text-muted">—</span>'}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    function renderRecentApps(){
+        const el=document.getElementById('recentAppsList');
+        const recent=allApplications.slice(0,5);
+        if(!recent.length){el.innerHTML='<div class="empty-state"><i class="fas fa-inbox"></i><p>No applications yet</p></div>';return;}
+        el.innerHTML=recent.map(a=>`<div class="mini-row"><div class="cell-avatar sm ${a.status==='approved'?'av-green':a.status==='rejected'?'av-red':'av-amber'}">${(a.user?.name||'?')[0].toUpperCase()}</div><div><strong>${a.user?.name||'—'}</strong><small>${a.internship?.title||''}</small></div><span class="badge badge-${a.status==='approved'?'green':a.status==='rejected'?'red':'amber'}">${a.status}</span></div>`).join('');
+    }
+
+    function renderAllocations(){
+        const tb=document.getElementById('allocationsBody');
+        document.getElementById('allocMeta').textContent=allAllocations.length+' allocations';
+        if(!allAllocations.length){tb.innerHTML='<tr><td colspan="5" class="empty-cell">No allocations found</td></tr>';return;}
+        tb.innerHTML=allAllocations.map(a=>`<tr>
+            <td><strong>${a.user?.name||'—'}</strong></td><td>${a.user?.email||'—'}</td>
+            <td>${a.internship?.title||'—'}</td><td>${a.internship?.company||'—'}</td>
+            <td>${a.allocatedAt?new Date(a.allocatedAt).toLocaleDateString():'—'}</td>
+        </tr>`).join('');
+    }
+
+    // ===== FILTERS =====
+    function filterStudents(){
+        const q=document.getElementById('studentSearchInput').value.toLowerCase();
+        const rows=document.querySelectorAll('#studentsBody tr');
+        rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});
+    }
+    function filterInternships(){
+        const q=document.getElementById('internshipSearchInput').value.toLowerCase();
+        const rows=document.querySelectorAll('#internshipsBody tr');
+        rows.forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});
+    }
+    function setAppFilter(f){
+        appFilter=f;
+        document.querySelectorAll('.ftab').forEach(b=>{b.classList.toggle('active',b.dataset.filter===f);});
+        renderApplications();
+    }
+
+    // ===== ACTIONS =====
+    async function approveApp(id){
+        if(!confirm('Approve this application?'))return;
+        try{const r=await fetch('/api/admin/approve',{method:'POST',headers:headers(),body:JSON.stringify({applicationId:id})});
+        const d=await r.json();if(d.success){toast('Application approved!','success');refreshAll();}else{toast(d.message,'error');}}catch(e){toast('Error','error');}
+    }
+    async function rejectApp(id){
+        if(!confirm('Reject this application?'))return;
+        try{const r=await fetch('/api/admin/reject',{method:'POST',headers:headers(),body:JSON.stringify({applicationId:id})});
+        const d=await r.json();if(d.success){toast('Application rejected','success');refreshAll();}else{toast(d.message,'error');}}catch(e){toast('Error','error');}
+    }
+    async function deleteUser(id){
+        if(!confirm('Delete this student and all their data?'))return;
+        try{const r=await fetch('/api/admin/users/'+id,{method:'DELETE',headers:headers()});
+        const d=await r.json();if(d.success){toast('Student deleted','success');refreshAll();}else{toast(d.message,'error');}}catch(e){toast('Error','error');}
+    }
+
+    // ===== REPORTS =====
+    function exportCSV(type){
+        let csv='',rows=[];
+        if(type==='students'){csv='Name,Email,Department,Institution,Skills,Joined\n';rows=allStudents.map(u=>[u.name,u.email,u.department||'',u.institution||'',(u.skills||[]).join(';'),u.createdAt?new Date(u.createdAt).toLocaleDateString():''].join(','));}
+        else if(type==='internships'){csv='Title,Company,Location,Duration,Stipend,Slots,Applications,Status\n';rows=allInternships.map(i=>[i.title,i.company,i.location||'',i.duration||'',i.stipend||'',i.slots,i.applicationCount||0,i.isActive?'Active':'Closed'].join(','));}
+        else if(type==='applications'){csv='Student,Email,Internship,Company,Applied,Status\n';rows=allApplications.map(a=>[a.user?.name||'',a.user?.email||'',a.internship?.title||'',a.internship?.company||'',new Date(a.appliedAt).toLocaleDateString(),a.status].join(','));}
+        else if(type==='allocations'){csv='Student,Email,Internship,Company,Allocated\n';rows=allAllocations.map(a=>[a.user?.name||'',a.user?.email||'',a.internship?.title||'',a.internship?.company||'',a.allocatedAt?new Date(a.allocatedAt).toLocaleDateString():''].join(','));}
+        csv+=rows.join('\n');
+        const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=type+'_report.csv';a.click();
+        toast(type+' report downloaded!','success');
+    }
+    function renderReportSummary(){
+        const el=document.getElementById('reportSummary');
+        const pending=allApplications.filter(a=>a.status==='pending').length;
+        const approved=allApplications.filter(a=>a.status==='approved').length;
+        const rejected=allApplications.filter(a=>a.status==='rejected').length;
+        const rate=allApplications.length?(approved/allApplications.length*100).toFixed(1):0;
+        el.innerHTML=`<div class="summary-grid">
+            <div class="summary-item"><span class="summary-val">${allStudents.length}</span><span class="summary-lbl">Total Students</span></div>
+            <div class="summary-item"><span class="summary-val">${allInternships.length}</span><span class="summary-lbl">Total Internships</span></div>
+            <div class="summary-item"><span class="summary-val">${allApplications.length}</span><span class="summary-lbl">Total Applications</span></div>
+            <div class="summary-item"><span class="summary-val">${pending}</span><span class="summary-lbl">Pending</span></div>
+            <div class="summary-item"><span class="summary-val">${approved}</span><span class="summary-lbl">Approved</span></div>
+            <div class="summary-item"><span class="summary-val">${rejected}</span><span class="summary-lbl">Rejected</span></div>
+            <div class="summary-item"><span class="summary-val">${rate}%</span><span class="summary-lbl">Approval Rate</span></div>
+            <div class="summary-item"><span class="summary-val">${allAllocations.length}</span><span class="summary-lbl">Allocations</span></div>
+        </div>`;
+    }
+
+    // ===== REFRESH ALL =====
+    async function refreshAll(){
+        await Promise.all([fetchStats(),fetchStudents(),fetchInternships(),fetchApplications(),fetchAllocations()]);
+        renderReportSummary();
+    }
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded',()=>{
+        refreshAll();
+        const h=location.hash.replace('#','');
+        if(h){
+            document.querySelectorAll('.nav-item').forEach(n=>{n.classList.toggle('active',n.dataset.page===h);});
+            document.querySelectorAll('.page').forEach(p=>{p.classList.toggle('active',p.id===h);});
+        }
+        // Set admin name
+        const user=localStorage.getItem('user');
+        if(user){try{const u=JSON.parse(user);document.getElementById('adminName').textContent=u.name||'Admin';}catch(e){}}
+    });
+    </script>
+</body>
+</html>

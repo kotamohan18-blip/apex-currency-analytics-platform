@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - InternHub Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        uber: '#080312',
+                        brand: {
+                            400: '#9f7aea',
+                            500: '#805ad5',
+                            600: '#6b46c1',
+                            700: '#553c9a',
+                            900: '#322659',
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-medium': 'float 6s ease-in-out infinite reverse',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) scale(1)' },
+                            '50%': { transform: 'translateY(-20px) scale(1.05)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(30px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(139, 92, 246, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(139, 92, 246, 0.7)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #080312; overflow-x: hidden; }
+        
+        .bg-mesh {
+            background-color: #080312;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(107, 70, 193, 0.35) 0%, transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.25) 0%, transparent 40%),
+                radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 30px 30px;
+            background-position: 0 0, 0 0, 0 0, 15px 15px;
+        }
+
+        .epic-glass {
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .dark-input {
+            background: rgba(10, 5, 20, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark-input:focus {
+            background: rgba(10, 5, 20, 0.8);
+            border-color: rgba(167, 139, 250, 0.5);
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15), inset 0 0 15px rgba(167, 139, 250, 0.1);
+        }
+
+        .premium-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.5), 0 8px 10px -6px rgba(124, 58, 237, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .premium-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 20px 30px -5px rgba(124, 58, 237, 0.6), 0 8px 10px -6px rgba(124, 58, 237, 0.1);
+        }
+
+        .mock-window {
+            background: rgba(15, 10, 25, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Moving orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Form transitions */
+        .form-pane { transition: opacity 0.4s ease, transform 0.4s ease; }
+        
+        .text-gradient {
+            background: linear-gradient(to right, #e9d5ff, #c084fc, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Chatbot CSS */
+        .chat-widget { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .chat-bubble { max-width: 85%; word-wrap: break-word; }
+        .chat-open { transform: scale(1) translateY(0); opacity: 1; bottom: 90px; pointer-events: auto; }
+        .chat-closed { transform: scale(0.9) translateY(20px); opacity: 0; pointer-events: none; bottom: 70px; }
+    </style>
+</head>
+
+<body class="min-h-screen bg-mesh text-white relative">
+    
+    <!-- Background Animated Orbs -->
+    <div class="orb bg-brand-500 w-96 h-96 top-[10%] left-[10%] animate-pulse-slow"></div>
+    <div class="orb bg-blue-600 w-80 h-80 bottom-[20%] right-[15%] animate-pulse-slow" style="animation-delay: 2s;"></div>
+    <div class="orb bg-pink-600 w-64 h-64 top-[40%] right-[40%] animate-pulse-slow" style="animation-delay: 4s;"></div>
+
+    <div class="max-w-[1600px] mx-auto min-h-screen flex flex-col xl:flex-row relative z-10 px-4 sm:px-8 py-8 lg:py-12 gap-12 lg:gap-20">
+
+        <!-- LEFT SIDE: High-Tech Visualization (Fuller, denser, completely modern) -->
+        <div class="w-full xl:w-[55%] flex flex-col justify-center animate-slide-up mt-10 xl:mt-0 relative z-20 order-2 xl:order-1">
+            
+            <a href="/index.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition w-max mb-12 hover:-translate-x-1 duration-300">
+                <i class="fas fa-arrow-left text-sm"></i> Return to ecosystem
+            </a>
+
+            <div class="w-20 h-20 bg-gradient-to-tr from-brand-400 via-indigo-500 to-blue-500 rounded-3xl flex items-center justify-center p-0.5 shadow-2xl mb-8 animate-float-slow">
+                <div class="w-full h-full bg-uber rounded-[22px] flex items-center justify-center">
+                    <i class="fas fa-bolt text-transparent bg-clip-text bg-gradient-to-tr from-brand-400 to-blue-400 text-3xl"></i>
+                </div>
+            </div>
+
+            <h1 class="text-5xl lg:text-7xl font-display font-bold leading-tight mb-6 tracking-tight">
+                Unlock your <br>
+                <span class="text-gradient">Professional Future.</span>
+            </h1>
+            
+            <p class="text-lg lg:text-xl text-gray-400 mb-12 max-w-xl font-light leading-relaxed">
+                Seamlessly connect with top-tier organizations. InternHub's AI-driven recruitment engine bridges the gap between raw talent and Fortune 500 opportunities.
+            </p>
+
+            <!-- Floating Mock UI Elements to make it feel FULL -->
+            <div class="relative w-full max-w-2xl hidden md:block">
+                
+                <!-- Mock Dashboard Window -->
+                <div class="mock-window rounded-2xl w-full h-[280px] p-6 relative overflow-hidden animate-float-slow">
+                    <!-- Titlebar -->
+                    <div class="flex gap-2 mb-6">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-6 mb-6">
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Live Applications</p>
+                            <p class="text-2xl font-display font-medium text-white">4,821</p>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">AI Match Rate</p>
+                            <p class="text-2xl font-display font-medium text-emerald-400">96.4%</p>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/5">
+                            <p class="text-xs text-gray-500 uppercase tracking-widest mb-1">Time to Hire</p>
+                            <p class="text-2xl font-display font-medium text-indigo-400">12 Days</p>
+                        </div>
+                    </div>
+
+                    <!-- Chart Mock -->
+                    <div class="h-20 w-full relative flex items-end gap-2 px-2">
+                        <div class="w-1/6 bg-gradient-to-t from-brand-600/50 to-transparent rounded-t-lg h-[40%]"></div>
+                        <div class="w-1/6 bg-gradient-to-t from-brand-600/50 to-transparent rounded-t-lg h-[60%]"></div>
+                        <div class="w-1/6 bg-gradient-to-t from-brand-600/80 to-transparent rounded-t-lg h-[85%] border-t border-brand-400"></div>
+                        <div class="w-1/6 bg-gradient-to-t from-brand-600/50 to-transparent rounded-t-lg h-[45%]"></div>
+                        <div class="w-1/6 bg-gradient-to-t from-brand-600/50 to-transparent rounded-t-lg h-[70%]"></div>
+                        <div class="w-1/6 bg-gradient-to-t from-brand-600/50 to-transparent rounded-t-lg h-[95%]"></div>
+                    </div>
+                </div>
+
+                <!-- Floating Code Card -->
+                <div class="epic-glass rounded-xl p-4 absolute -right-12 -top-10 w-72 animate-float-medium z-10 border border-brand-500/30">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 text-xs"><i class="fas fa-check"></i></div>
+                        <p class="text-sm font-medium text-white">System Synchronized</p>
+                    </div>
+                    <div class="space-y-2 font-mono text-[10px] text-gray-400">
+                        <p><span class="text-brand-400">await</span> Database.connect();</p>
+                        <p><span class="text-brand-400">const</span> status = <span class="text-green-400">"Online"</span>;</p>
+                        <p>engine.deployNetworks(status);</p>
+                    </div>
+                </div>
+
+                <!-- Floating Notification -->
+                <div class="epic-glass rounded-xl p-4 absolute -left-8 -bottom-6 animate-float-fast z-10 flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400"><i class="fas fa-bell"></i></div>
+                    <div>
+                        <p class="text-sm font-bold text-white">Google Internship</p>
+                        <p class="text-xs text-gray-400">Application Approved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: The Form Structure -->
+        <div class="w-full xl:w-[45%] flex items-center justify-center order-1 xl:order-2 z-30">
+            
+            <!-- Highly stylized glass form container -->
+            <div class="epic-glass rounded-[2rem] p-8 sm:p-12 w-full max-w-[540px] relative overflow-hidden animate-slide-up" style="animation-delay: 0.2s;">
+                <!-- Inner ambient glow -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-600/20 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
+
+                <div class="relative min-h-[460px] w-full">
+                    
+                    <!-- ============================================== -->
+                    <!-- PANE 1: LOGIN -->
+                    <!-- ============================================== -->
+                    <div id="pane-login" class="form-pane absolute inset-0 w-full flex flex-col justify-center">
+                        <div class="mb-10 text-center">
+                            <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mb-3">Welcome Back</h2>
+                            <p class="text-gray-400">
+                                New here? <a href="/signup.html" class="text-brand-400 hover:text-brand-300 font-semibold transition-colors">Create an account</a>
+                            </p>
+                        </div>
+
+                        <form id="loginForm" class="space-y-6">
+                            <div>
+                                <label class="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                                <div class="relative flex items-center group">
+                                    <div class="absolute left-4 w-5 h-5 flex items-center justify-center text-gray-500 group-focus-within:text-brand-400 transition-colors">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <input id="email" type="email" placeholder="hello@internhub.com" class="dark-input w-full p-4 pl-12 rounded-2xl outline-none text-base placeholder-gray-600" required>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between items-center mb-2 ml-1">
+                                    <label class="block text-gray-400 text-xs font-bold uppercase tracking-widest">Password</label>
+                                    <button type="button" onclick="switchPane('pane-forgot')" class="text-brand-400 hover:text-white text-xs font-bold transition-colors">Forgot password?</button>
+                                </div>
+                                <div class="relative flex items-center group">
+                                    <div class="absolute left-4 w-5 h-5 flex items-center justify-center text-gray-500 group-focus-within:text-brand-400 transition-colors">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                    <input id="password" type="password" placeholder="••••••••" class="dark-input w-full p-4 pl-12 pr-12 rounded-2xl outline-none text-base placeholder-gray-600" required>
+                                    <button type="button" onclick="toggleVision('password', this)" class="absolute right-4 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition">
+                                        <i class="fas fa-eye text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button id="loginBtn" type="submit" class="premium-btn w-full text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-3 mt-8 group">
+                                <span>Authenticate</span>
+                                <i class="fas fa-arrow-right text-sm group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                            
+                            <!-- Custom Message Banner -->
+                            <div id="msg" class="hidden items-center gap-3 p-4 rounded-xl mt-4 font-medium text-sm"></div>
+                        </form>
+                    </div>
+
+
+                    <!-- ============================================== -->
+                    <!-- PANE 2: FORGOT PASSWORD -->
+                    <!-- ============================================== -->
+                    <div id="pane-forgot" class="form-pane absolute inset-0 w-full flex flex-col justify-center opacity-0 translate-x-12 pointer-events-none">
+                        <button type="button" onclick="switchPane('pane-login')" class="text-gray-400 hover:text-white text-sm font-semibold flex items-center transition-colors mb-8 w-max">
+                            <i class="fas fa-arrow-left mr-2 bg-white/10 p-1.5 rounded-full"></i> Sign In
+                        </button>
+                        
+                        <div class="mb-8">
+                            <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mb-3">Recover Access</h2>
+                            <p class="text-gray-400 leading-relaxed">Enter the email associated with your account. We'll dispatch a secure recovery token directly to your inbox.</p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                                <div class="relative flex items-center group">
+                                    <div class="absolute left-4 w-5 h-5 flex items-center justify-center text-gray-500 group-focus-within:text-brand-400 transition-colors">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </div>
+                                    <input id="forgotEmail" type="email" placeholder="hello@internhub.com" class="dark-input w-full p-4 pl-12 rounded-2xl outline-none text-base placeholder-gray-600">
+                                </div>
+                            </div>
+
+                            <button id="sendOtpBtn" onclick="requestOTP()" class="premium-btn w-full text-white font-bold py-4 rounded-2xl flex justify-center items-center gap-3 mt-4 group">
+                                <span>Send Recovery Token</span>
+                                <i class="fas fa-shield-alt text-sm group-hover:scale-110 transition-transform"></i>
+                            </button>
+                            
+                            <div id="forgotMsg" class="hidden items-center gap-3 p-4 rounded-xl mt-4 font-medium text-sm"></div>
+                        </div>
+                    </div>
+
+
+                    <!-- ============================================== -->
+                    <!-- PANE 3: RESET PASSWORD (OTP + NEW PASS)        -->
+                    <!-- ============================================== -->
+                    <div id="pane-reset" class="form-pane absolute inset-0 w-full flex flex-col justify-center opacity-0 translate-x-12 pointer-events-none">
+                        <button type="button" onclick="switchPane('pane-forgot')" class="text-gray-400 hover:text-white text-sm font-semibold flex items-center transition-colors mb-4 w-max">
+                            <i class="fas fa-arrow-left mr-2 bg-white/10 p-1.5 rounded-full"></i> Change Email
+                        </button>
+                        
+                        <div class="mb-6">
+                            <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mb-2">Reset Sequence</h2>
+                            <p class="text-gray-400 leading-relaxed text-sm">Enter the 6-digit key sent to <span id="verifyEmailDisplay" class="text-brand-400 font-bold"></span> along with your new password.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-1 ml-1">Secure Token</label>
+                                <div class="relative flex items-center group">
+                                    <div class="absolute left-4 w-5 h-5 flex items-center justify-center text-gray-500 group-focus-within:text-brand-400 transition-colors">
+                                        <i class="fas fa-key"></i>
+                                    </div>
+                                    <input id="verifyOtp" type="text" placeholder="------" maxlength="6" class="dark-input w-full p-3 pl-12 rounded-xl outline-none text-xl tracking-[1em] text-center font-mono placeholder-gray-600 uppercase">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-gray-400 text-xs font-bold uppercase tracking-widest mb-1 ml-1">New Terminal Password</label>
+                                <div class="relative flex items-center group">
+                                    <div class="absolute left-4 w-5 h-5 flex items-center justify-center text-gray-500 group-focus-within:text-green-400 transition-colors">
+                                        <i class="fas fa-lock"></i>
+                                    </div>
+                                    <input id="newPassword" type="password" placeholder="••••••••" class="dark-input w-full p-3 pl-12 pr-12 rounded-xl outline-none text-base focus:border-green-500/50 focus:shadow-[0_0_0_4px_rgba(34,197,94,0.1)] placeholder-gray-600">
+                                    <button type="button" onclick="toggleVision('newPassword', this)" class="absolute right-4 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition">
+                                        <i class="fas fa-eye text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button id="resetPassBtn" onclick="resetPassword()" class="bg-gradient-to-r from-green-500 to-emerald-600 shadow-lg shadow-green-600/30 w-full text-white font-bold py-3.5 rounded-xl flex justify-center items-center gap-3 mt-2 hover:scale-[1.01] transition-transform">
+                                <span>Validate & Deploy</span>
+                                <i class="fas fa-server text-sm"></i>
+                            </button>
+                            
+                            <div id="resetMsg" class="hidden items-center gap-3 p-3 rounded-xl mt-2 font-medium text-sm"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ============================================== -->
+    <!-- AI CHATBOT WIDGET                              -->
+    <!-- ============================================== -->
+    <button onclick="toggleChat()" class="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-tr from-brand-600 to-blue-600 text-white rounded-2xl shadow-[0_10px_30px_rgba(107,70,193,0.5)] flex items-center justify-center text-2xl hover:-translate-y-2 hover:scale-105 transition-all z-50 border border-white/20 animate-glow">
+        <i id="chatIcon" class="fas fa-robot"></i>
+    </button>
+
+    <div id="chatWindow" class="chat-widget chat-closed fixed right-8 w-[380px] epic-glass rounded-3xl z-40 flex flex-col overflow-hidden" style="height: 550px;">
+        <div class="bg-gradient-to-r from-brand-800/80 to-brand-900/80 p-5 text-white flex justify-between items-center border-b border-white/10 backdrop-blur-md">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20 shadow-inner"><i class="fas fa-robot text-lg"></i></div>
+                <div>
+                    <h3 class="font-bold font-display text-base tracking-wide">InternBot Central</h3>
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                        <p class="text-xs text-brand-200 font-medium tracking-widest uppercase">System Online</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"><i class="fas fa-times text-white/80"></i></button>
+        </div>
+        
+        <div id="chatMessages" class="flex-1 p-5 overflow-y-auto space-y-4 flex flex-col text-sm relative">
+            <div class="flex justify-start relative z-10 w-full animate-slide-up">
+                <div class="chat-bubble bg-white/5 border border-white/10 text-gray-200 p-4 rounded-2xl rounded-tl-sm shadow-sm leading-relaxed backdrop-blur-sm">
+                    Welcome to the nexus! 🌌 Facing auth issues? Ask me about password recovery, or how to navigate the portal.
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 bg-black/40 border-t border-white/5 flex items-center gap-3 backdrop-blur-md">
+            <input type="text" id="chatInput" placeholder="Initialize query..." class="flex-1 bg-white/5 text-white text-sm p-4 rounded-2xl outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500 transition-all border border-transparent focus:border-brand-500/50 placeholder-gray-500" onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()" class="w-12 h-12 bg-brand-600 text-white rounded-2xl flex items-center justify-center hover:bg-brand-500 transition-colors shadow-lg"><i class="fas fa-paper-plane text-sm"></i></button>
+        </div>
+    </div>
+
+
+    <!-- LOGIC SCRIPT -->
+    <script>
+        // Check if user is logged in
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token');
+            if (token) window.location.href = "/dashboard.html";
+        });
+
+        // Toggle Password Vision
+        function toggleVision(id, btn) {
+            const input = document.getElementById(id);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash text-xs text-gray-300';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye text-xs text-gray-500';
+            }
+        }
+
+        // View Management
+        let currentPane = 'pane-login';
+        
+        function switchPane(targetId) {
+            const cur = document.getElementById(currentPane);
+            cur.classList.remove('opacity-100', 'translate-x-0', 'pointer-events-auto');
+            cur.classList.add('opacity-0', '-translate-x-12', 'pointer-events-none');
+            
+            setTimeout(() => {
+                const tgt = document.getElementById(targetId);
+                tgt.classList.remove('opacity-0', 'translate-x-12', '-translate-x-12', 'pointer-events-none');
+                tgt.classList.add('opacity-100', 'translate-x-0', 'pointer-events-auto');
+                currentPane = targetId;
+            }, 100);
+        }
+
+        function showMsg(id, text, type) {
+            const el = document.getElementById(id);
+            if (!text) {
+                el.classList.add('hidden');
+                return;
+            }
+            el.innerHTML = type === 'success' 
+                ? `<i class="fas fa-check-circle text-lg"></i> ${text}` 
+                : `<i class="fas fa-exclamation-triangle text-lg"></i> ${text}`;
+            el.className = `flex items-center gap-3 p-4 rounded-xl mt-4 font-medium text-sm animate-slide-up ${
+                type === 'err' 
+                ? 'bg-red-500/10 border border-red-500/20 text-red-400' 
+                : 'bg-green-500/10 border border-green-500/20 text-green-400'
+            }`;
+            el.classList.remove('hidden');
+        }
+
+        // ---------- STANDARD LOGIN ----------
+        document.getElementById("loginForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById("loginBtn");
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> <span>Authenticating Engine...</span>`;
+            btn.disabled = true;
+            showMsg('msg', '', '');
+
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "true",
+                        "Bypass-Tunnel-Reminder": "true"
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    showMsg('msg', data.message || "Invalid credentials. Firewall active.", 'err');
+                } else {
+                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("user", JSON.stringify(data.user));
+                    localStorage.setItem("isLoggedIn", "true");
+                    
+                    showMsg('msg', "Access granted. Synchronizing systems...", 'success');
+                    setTimeout(() => window.location.href = "/dashboard.html", 1000);
+                }
+            } catch (err) {
+                showMsg('msg', "Connection timeout. Servers unreachable.", 'err');
+            } finally {
+                if(!document.getElementById('msg').classList.contains('text-green-400')){
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>Authenticate</span> <i class="fas fa-arrow-right text-sm"></i>`;
+                }
+            }
+        });
+
+
+        // ---------- FORGOT PASSWORD FLOW ----------
+        let resetEmail = "";
+
+        async function requestOTP() {
+            const emailField = document.getElementById('forgotEmail');
+            const btn = document.getElementById('sendOtpBtn');
+            const email = emailField.value.trim();
+            
+            if(!email) { showMsg('forgotMsg', "Error: Email parameter required.", 'err'); return; }
+
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> <span>Transmitting...</span>`;
+            btn.disabled = true;
+            showMsg('forgotMsg', '', '');
+            
+            try {
+                const res = await fetch("/api/auth/forgot-password", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "true",
+                        "Bypass-Tunnel-Reminder": "true"
+                    },
+                    body: JSON.stringify({ email })
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    resetEmail = email;
+                    document.getElementById('verifyEmailDisplay').textContent = email;
+                    emailField.value = '';
+                    switchPane('pane-reset');
+
+                    // Dev mode: auto-fill OTP if returned by server
+                    if (data.otp) {
+                        setTimeout(() => {
+                            document.getElementById('verifyOtp').value = data.otp;
+                            showMsg('resetMsg', `⚡ Dev mode: OTP auto-filled (${data.otp}). Enter new password below.`, 'success');
+                        }, 300);
+                    }
+                } else {
+                    showMsg('forgotMsg', data.message || "Transmission intercepted. Failed.", 'err');
+                }
+            } catch(err) {
+                showMsg('forgotMsg', "Network timeout limit exceeded.", 'err');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Send Recovery Token</span> <i class="fas fa-shield-alt text-sm"></i>`;
+            }
+        }
+
+        async function resetPassword() {
+            const btn = document.getElementById('resetPassBtn');
+            const otp = document.getElementById('verifyOtp').value.trim();
+            const newPassword = document.getElementById('newPassword').value;
+            
+            if(!otp || otp.length !== 6) { showMsg('resetMsg', "Malformed hash. Require 6 digits.", 'err'); return; }
+            if(newPassword.length < 6) { showMsg('resetMsg', "Password minimum 6 characters required.", 'err'); return; }
+
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> <span>Committing to Database...</span>`;
+            btn.disabled = true;
+            showMsg('resetMsg', '', '');
+            
+            try {
+                const res = await fetch("/api/auth/reset-password", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "true",
+                        "Bypass-Tunnel-Reminder": "true"
+                    },
+                    body: JSON.stringify({ email: resetEmail, otp, newPassword })
+                });
+                const data = await res.json();
+                
+                if(!res.ok || !data.success) {
+                    showMsg('resetMsg', data.message || "Database update rollback. Failed.", 'err');
+                } else {
+                    document.getElementById('verifyOtp').value = '';
+                    document.getElementById('newPassword').value = '';
+                    switchPane('pane-login');
+                    document.getElementById('email').value = resetEmail;
+                    showMsg('msg', "Credential matrix successfully updated. You may proceed.", 'success');
+                }
+            } catch(err) {
+                showMsg('resetMsg', "Secure connection terminated.", 'err');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<span>Validate & Deploy</span> <i class="fas fa-server text-sm"></i>`;
+            }
+        }
+
+        // ---------- CHATBOT LOGIC ----------
+        const chatWindow = document.getElementById("chatWindow");
+        const chatIcon = document.getElementById("chatIcon");
+        const chatMessages = document.getElementById("chatMessages");
+        const chatInput = document.getElementById("chatInput");
+        let chatOpen = false;
+
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            if(chatOpen) {
+                chatWindow.classList.replace("chat-closed", "chat-open");
+                chatIcon.classList.replace("fa-robot", "fa-chevron-down");
+                chatInput.focus();
+            } else {
+                chatWindow.classList.replace("chat-open", "chat-closed");
+                chatIcon.classList.replace("fa-chevron-down", "fa-robot");
+            }
+        }
+
+        function getSmartReply(prompt) {
+            const p = prompt.toLowerCase().trim();
+            if (/^(hi|hello|hey|hiya|howdy|sup)/.test(p))
+                return "Hey! 👋 I'm InternBot. I can help you:\n• Login issues\n• Password recovery\n• Create an account\n• Navigate InternHub\n\nWhat do you need?";
+            if (p.includes('forgot') || p.includes('reset') || p.includes('password') || p.includes('recover'))
+                return "🔐 **Forgot your password?**\n1. Click **'Forgot password?'** on the login form\n2. Enter your registered email\n3. We'll send a 6-digit OTP to your inbox\n4. Enter the OTP + your new password\n5. Done! You can now log in.\n\nOTP expires in 5 minutes.";
+            if (p.includes('login') || p.includes('sign in') || p.includes('log in'))
+                return "🚀 To log in:\n1. Enter your **email** and **password**\n2. Click **Authenticate**\n\nIf your credentials fail, try **Forgot Password** to reset your access.";
+            if (p.includes('register') || p.includes('signup') || p.includes('sign up') || p.includes('create account') || p.includes('new account'))
+                return "✨ **Create an account:**\n1. Click **'Create an account'** at the top of the login form\n2. Fill in your name, email, password\n3. Add your **Registry ID** and **Institution**\n4. Submit — you're in!\n\nAlready have an account? Just log in above.";
+            if (p.includes('otp') || p.includes('code') || p.includes('token') || p.includes('verification'))
+                return "📧 **OTP Help:**\n• Check your inbox (and spam folder)\n• OTP is valid for **5 minutes**\n• It's a 6-digit number\n• If expired, click 'Send Recovery Token' again\n\nStill not received? Email: support@internhub.dev";
+            if (p.includes('email') || p.includes('gmail'))
+                return "📬 Make sure you're using the exact email you registered with. Emails are case-insensitive.\n\nForgot which email? Contact: support@internhub.dev";
+            if (p.includes('internship') || p.includes('apply') || p.includes('job') || p.includes('role'))
+                return "💼 To browse internships, **log in first** then go to the **Internships** page!\n\nDon't have an account? Click **'Create an account'** to get started.";
+            if (p.includes('contact') || p.includes('support') || p.includes('help') || p.includes('issue') || p.includes('problem'))
+                return "🆘 **Need help?**\n• Email: support@internhub.dev\n• Enterprise: corporate@internhub.dev\n\nOr ask me directly — I handle login, password reset, and account queries!";
+            if (p.includes('thank') || p.includes('thanks') || p.includes('great') || p.includes('awesome'))
+                return "😊 Happy to help! Good luck with your InternHub journey. Click **Authenticate** to get started!";
+            const fallbacks = [
+                "🤔 I'm your login assistant! Try asking:\n• **'Forgot password'** — Reset steps\n• **'How to register'** — New account guide\n• **'OTP not received'** — Email troubleshooting",
+                "💬 I can help with:\n• Login problems\n• Password recovery\n• Creating an account\n• OTP issues\n\nWhat's going on?",
+                "🔐 Need access to InternHub? I can guide you through login, registration, and password recovery. Just ask!"
+            ];
+            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        }
+
+        chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if(!text) return;
+            addMsg(text, 'user');
+            chatInput.value = '';
+            const loadingId = addMsg('<i class="fas fa-circle-notch fa-spin text-brand-400"></i>', 'bot');
+            await new Promise(r => setTimeout(r, 400 + Math.random() * 300));
+            document.getElementById(loadingId)?.remove();
+            addMsg(getSmartReply(text), 'bot');
+        }
+
+        function addMsg(html, sender, isError = false) {
+            const div = document.createElement('div');
+            const id = 'msg-' + Date.now() + Math.random();
+            div.id = id;
+            div.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} w-full animate-slide-up`;
+            const outer = sender === 'user'
+                ? 'bg-gradient-to-br from-brand-600 to-indigo-600 text-white shadow-md'
+                : (isError ? 'bg-red-500/10 border border-red-500/20 text-red-400' : 'bg-white/5 border border-white/10 text-gray-200 backdrop-blur-md');
+            const formatted = html
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#e9d5ff">$1</strong>')
+                .replace(/\n/g, '<br>');
+            div.innerHTML = `<div class="chat-bubble ${outer} p-4 rounded-2xl ${sender==='user'? 'rounded-tr-sm':'rounded-tl-sm'} leading-relaxed text-sm">${formatted}</div>`;
+            chatMessages.appendChild(div);
+            setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 50);
+            return id;
+        }
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Apply</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-6">
+
+<h2 class="text-xl font-bold mb-4">Apply Internship</h2>
+
+<form id="applyForm" class="space-y-4 bg-white p-4 rounded shadow">
+
+<input type="text" id="name" placeholder="Your Name" class="w-full border p-2" required>
+
+<input type="text" id="skills" placeholder="Skills" class="w-full border p-2" required>
+
+<textarea id="why" placeholder="Why should we select you?" class="w-full border p-2" required></textarea>
+
+<input type="file" id="resume" class="w-full border p-2">
+
+<button class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+
+</form>
+
+<script>
+
+const token = localStorage.getItem("token");
+
+if (!token) {
+    window.location.href = "/login";
+}
+
+const params = new URLSearchParams(window.location.search);
+const internshipId = params.get("id");
+
+console.log("Internship ID:", internshipId);
+
+document.getElementById("applyForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    if (!internshipId) {
+        alert("Invalid internship");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("internshipId", internshipId);
+    formData.append("name", document.getElementById("name").value);
+    formData.append("skills", document.getElementById("skills").value);
+    formData.append("why", document.getElementById("why").value);
+
+    const file = document.getElementById("resume").files[0];
+    if (file) formData.append("resume", file);
+
+    const res = await fetch("/api/applications", {
+        method: "POST",
+        headers: {
+            Authorization: "Bearer " + token
+        },
+        body: formData
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        alert("Applied successfully");
+        window.location.href = "/internships.html";
+    } else {
+        alert(data.message || "Error");
+    }
+});
+
+</script>
+
+</body>
+</html>

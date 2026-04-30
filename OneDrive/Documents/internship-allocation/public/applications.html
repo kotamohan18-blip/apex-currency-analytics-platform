@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - InternHub</title>
+    <link rel="icon" href="data:,">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fce7f3; background-image: radial-gradient(at 40% 20%, hsla(253,16%,7%,1) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%), radial-gradient(at 80% 50%, hsla(340,100%,76%,1) 0px, transparent 50%), radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%), radial-gradient(at 80% 100%, hsla(242,100%,70%,1) 0px, transparent 50%), radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%); background-attachment: fixed; }
+        h1, h2, h3, .nav-logo { font-family: 'Outfit', sans-serif; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+
+<body class="m-0 min-h-screen">
+
+<!-- Navbar -->
+<nav class="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
+                    <i class="fas fa-graduation-cap text-white text-lg"></i>
+                </div>
+                <span class="nav-logo font-bold text-2xl text-gray-900 tracking-tight">InternHub</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="flex items-center gap-2">
+                <a href="/dashboard.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </a>
+                <a href="/profile.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                    <i class="fas fa-user mr-2"></i>Profile
+                </a>
+                <a href="/internships.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                    <i class="fas fa-briefcase mr-2"></i>Internships
+                </a>
+                <a href="/applications.html" class="px-4 py-2 rounded-lg text-sm font-bold text-indigo-700 bg-indigo-50/80 shadow-sm border border-indigo-100 transition">
+                    <i class="fas fa-file-alt mr-2"></i>Applications
+                </a>
+            </div>
+
+            <!-- Logout Button -->
+            <button onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50/80 rounded-lg transition">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Block -->
+<div class="p-6 pt-28 max-w-5xl mx-auto z-10 relative pb-20">
+    <div class="mb-10 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mix-blend-difference mb-4 drop-shadow-sm tracking-tight">Track Your Opportunities</h1>
+        <p class="text-lg text-gray-800 font-medium bg-white/40 inline-block px-4 py-1 rounded-xl backdrop-blur-sm">View real-time status of your active applications.</p>
+    </div>
+
+    <!-- Container for dynamic apps -->
+    <div id="applicationsList" class="space-y-6">
+        <!-- Spinner -->
+        <div class="text-center py-20 bg-white/50 backdrop-blur-sm rounded-2xl">
+            <i class="fas fa-spinner fa-spin text-4xl text-indigo-500 mb-2"></i>
+            <p class="text-gray-600 font-medium">Fetching application data...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+const token = localStorage.getItem("token");
+
+if (!token) {
+    window.location.href = "/login.html";
+}
+
+document.addEventListener("DOMContentLoaded", loadApplications);
+
+async function loadApplications() {
+    try {
+        const res = await fetch("/api/applications", {
+            headers: { Authorization: "Bearer " + token }
+        });
+
+        const data = await res.json();
+        const container = document.getElementById("applicationsList");
+
+        if (!data.applications || data.applications.length === 0) {
+            container.innerHTML = `
+                <div class="glass-card p-12 text-center rounded-3xl">
+                    <i class="fas fa-folder-open text-6xl text-gray-300 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">No Applications Found</h3>
+                    <p class="text-gray-500 mb-6 font-medium">You haven't submitted any internship applications yet.</p>
+                    <a href="/internships.html" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-indigo-200 transition-all">Browse Internships</a>
+                </div>`;
+            return;
+        }
+
+        container.innerHTML = data.applications.map(app => {
+            const dateStr = new Date(app.appliedAt).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            // Generate colored status badge natively
+            let statusBadge = "";
+            if (app.status === "pending") {
+                statusBadge = `<span class="bg-yellow-100 text-yellow-800 font-bold px-4 py-1.5 rounded-full text-sm flex items-center gap-2 border border-yellow-200"><div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div> In Review</span>`;
+            } else if (app.status === "approved" || app.status === "selected") {
+                statusBadge = `<span class="bg-green-100 text-green-800 font-bold px-4 py-1.5 rounded-full text-sm flex items-center gap-2 border border-green-200"><i class="fas fa-check-circle"></i> Selected</span>`;
+            } else {
+                statusBadge = `<span class="bg-red-100 text-red-800 font-bold px-4 py-1.5 rounded-full text-sm flex items-center gap-2 border border-red-200"><i class="fas fa-times-circle"></i> Rejected</span>`;
+            }
+
+            const title = app.internship ? app.internship.title : "Unknown Position";
+            const company = app.internship ? app.internship.company : "Unknown Company";
+            const location = app.internship && app.internship.location ? app.internship.location : "Remote";
+
+            return `
+            <div class="glass-card p-6 rounded-2xl relative overflow-hidden group">
+                <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                    <!-- Left: Info -->
+                    <div class="flex items-center gap-5">
+                        <div class="w-14 h-14 bg-white rounded-xl shadow border border-gray-100 flex items-center justify-center flex-shrink-0 text-2xl">
+                            🏢
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 leading-tight mb-1">${title}</h3>
+                            <p class="text-indigo-600 font-semibold mb-1">${company}</p>
+                            <p class="text-sm text-gray-500 font-medium">Applied on ${dateStr} • ${location}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Status -->
+                    <div class="flex flex-col items-start md:items-end gap-2">
+                        ${statusBadge}
+                        <button disabled class="mt-2 text-indigo-500 text-sm font-bold opacity-80 hover:opacity-100 flex items-center gap-1">
+                            View Details <i class="fas fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+
+    } catch (err) {
+        document.getElementById("applicationsList").innerHTML = `
+            <div class="bg-red-50 border border-red-200 text-red-600 p-6 rounded-xl text-center font-medium">
+                <i class="fas fa-exclamation-triangle text-2xl mb-2 block"></i>
+                Network error. Please try again later.
+            </div>`;
+    }
+}
+
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isLoggedIn");
+    window.location.href = "/login.html";
+}
+</script>
+
+<!-- Footer -->
+    <footer class="bg-black/80 border-t border-gray-800 pt-16 pb-8 mt-12 relative z-10 w-full text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-satellite-dish text-white text-sm"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl tracking-wide text-white">InternHub</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                        InternHub is the premier talent acceleration ecosystem designed to seamlessly match the top emerging tech professionals with industry-leading organizations. Our neural networks analyze your unique skill profile to provide unparalleled access to hyper-relevant roles across the globe. Built for the future of work.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Platform</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/internships.html" class="hover:text-blue-400 transition-colors">Browse Roles</a></li>
+                        <li><a href="/applications.html" class="hover:text-blue-400 transition-colors">Track Applications</a></li>
+                        <li><a href="/profile.html" class="hover:text-blue-400 transition-colors">Upgrade Profile</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Legal & Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/privacy.html" class="hover:text-blue-400 transition-colors">Privacy Directive</a></li>
+                        <li><a href="/terms.html" class="hover:text-blue-400 transition-colors">Terms of Access</a></li>
+                        <li><a href="/contact.html" class="hover:text-blue-400 transition-colors">Contact Command</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-gray-500 font-mono tracking-widest">&copy; 2026 InternHub Ecosystem. All rights reserved.</p>
+                <div class="flex items-center gap-4 text-gray-400">
+                    <a href="https://twitter.com/InternHub" target="_blank" class="hover:text-blue-400 transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://github.com" target="_blank" class="hover:text-gray-400 transition-colors"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hover:text-blue-600 transition-colors"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shared Chatbot Widget -->
+    <script src="/js/chatbot.js"></script>
+
+</body>
+</html>

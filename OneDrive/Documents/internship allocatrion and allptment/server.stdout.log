@@ -1,0 +1,8 @@
+🚀 InternHub Backend Server Starting...
+🗄️ Database initialized with SQLite
+🔗 API endpoints available at http://localhost:5000/api
+🌐 Frontend available at http://localhost:5000
+🤖 Chatbot API enabled
+📄 Resume parsing enabled
+✅ Connected to SQLite database
+✅ Database tables initialized successfully

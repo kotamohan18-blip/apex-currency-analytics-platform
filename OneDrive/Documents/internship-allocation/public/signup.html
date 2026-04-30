@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - InternHub Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        uber: '#080312',
+                        brand: {
+                            400: '#9f7aea',
+                            500: '#805ad5',
+                            600: '#6b46c1',
+                            700: '#553c9a',
+                            900: '#322659',
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-medium': 'float 6s ease-in-out infinite reverse',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'glow': 'glow 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) scale(1)' },
+                            '50%': { transform: 'translateY(-20px) scale(1.05)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(30px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(139, 92, 246, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(139, 92, 246, 0.7)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #080312; overflow-x: hidden; }
+        
+        .bg-mesh {
+            background-color: #080312;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(107, 70, 193, 0.35) 0%, transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.25) 0%, transparent 40%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.25) 0%, transparent 40%),
+                radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 30px 30px;
+            background-position: 0 0, 0 0, 0 0, 15px 15px;
+        }
+
+        .epic-glass {
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .dark-input {
+            background: rgba(10, 5, 20, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .dark-input:focus {
+            background: rgba(10, 5, 20, 0.8);
+            border-color: rgba(167, 139, 250, 0.5);
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.15), inset 0 0 15px rgba(167, 139, 250, 0.1);
+        }
+
+        .dark-select {
+            background-color: rgba(10, 5, 20, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: white;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .dark-select option {
+            background-color: #1a1025;
+            color: white;
+        }
+
+        .premium-btn {
+            background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+            box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.5), 0 8px 10px -6px rgba(124, 58, 237, 0.1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .premium-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 20px 30px -5px rgba(124, 58, 237, 0.6), 0 8px 10px -6px rgba(124, 58, 237, 0.1);
+        }
+
+        .mock-window {
+            background: rgba(15, 10, 25, 0.8);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #e9d5ff, #c084fc, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chat-widget { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .chat-bubble { max-width: 85%; word-wrap: break-word; }
+        .chat-open { transform: scale(1) translateY(0); opacity: 1; bottom: 90px; pointer-events: auto; }
+        .chat-closed { transform: scale(0.9) translateY(20px); opacity: 0; pointer-events: none; bottom: 70px; }
+        
+        /* Custom Checkbox */
+        .cyber-checkbox input:checked + div {
+            background-color: #8b5cf6;
+            border-color: #8b5cf6;
+        }
+        .cyber-checkbox input:checked + div svg {
+            display: block;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-mesh text-white relative">
+    
+    <!-- Background Animated Orbs -->
+    <div class="orb bg-brand-500 w-96 h-96 top-[10%] right-[10%] animate-pulse-slow"></div>
+    <div class="orb bg-blue-600 w-80 h-80 bottom-[20%] left-[15%] animate-pulse-slow" style="animation-delay: 2s;"></div>
+    <div class="orb bg-pink-600 w-64 h-64 top-[40%] left-[40%] animate-pulse-slow" style="animation-delay: 4s;"></div>
+
+    <div class="max-w-[1600px] mx-auto min-h-screen flex flex-col xl:flex-row relative z-10 px-4 sm:px-8 py-8 lg:py-12 gap-12 lg:gap-20">
+
+        <!-- LEFT SIDE: High-Tech Visualization (Reversed from Login) -->
+        <div class="w-full xl:w-[45%] flex flex-col justify-center animate-slide-up relative z-20">
+            
+            <a href="/index.html" class="inline-flex items-center gap-2 text-gray-400 hover:text-white transition w-max mb-12 hover:-translate-x-1 duration-300">
+                <i class="fas fa-arrow-left text-sm"></i> Return to ecosystem
+            </a>
+
+            <div class="w-20 h-20 bg-gradient-to-br from-green-400 via-emerald-500 to-teal-500 rounded-3xl flex items-center justify-center p-0.5 shadow-2xl mb-8 animate-float-medium">
+                <div class="w-full h-full bg-uber rounded-[22px] flex items-center justify-center">
+                    <i class="fas fa-rocket text-transparent bg-clip-text bg-gradient-to-br from-green-400 to-teal-400 text-3xl transform -rotate-12"></i>
+                </div>
+            </div>
+
+            <h1 class="text-5xl lg:text-7xl font-display font-bold leading-tight mb-6 tracking-tight">
+                Initialize <br>
+                <span class="text-gradient">Your Trajectory.</span>
+            </h1>
+            
+            <p class="text-lg lg:text-xl text-gray-400 mb-12 max-w-xl font-light leading-relaxed">
+                Join the ultimate nexus of emerging talent and industry pioneers. Create your profile to unlock AI-curated opportunities tailored to your matrix.
+            </p>
+
+            <!-- Floating Mock UI Elements -->
+            <div class="relative w-full max-w-2xl hidden md:block">
+                
+                <!-- Mock Dashboard Window -->
+                <div class="mock-window rounded-2xl w-full p-6 relative overflow-hidden animate-float-slow">
+                    <!-- Titlebar -->
+                    <div class="flex gap-2 mb-6">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                            <div class="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl"><i class="fas fa-user-astronaut"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Identity Verification</h4>
+                                <p class="text-xs text-gray-400">Secure profile generation</p>
+                            </div>
+                            <div class="ml-auto text-green-400"><i class="fas fa-check-circle lg"></i></div>
+                        </div>
+                        
+                        <div class="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/5">
+                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 text-xl"><i class="fas fa-brain"></i></div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Neural Matching Engine</h4>
+                                <p class="text-xs text-gray-400">Aligning skills to matrix</p>
+                            </div>
+                            <div class="ml-auto w-5 h-5 rounded-full border-2 border-brand-500 border-t-transparent animate-spin"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Code Card -->
+                <div class="epic-glass rounded-xl p-4 absolute -right-6 bottom-4 w-64 animate-float-fast z-10 border border-emerald-500/30">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs"><i class="fas fa-shield-alt"></i></div>
+                        <p class="text-sm font-medium text-white">Encryption Active</p>
+                    </div>
+                    <div class="space-y-2 font-mono text-[10px] text-gray-400">
+                        <p><span class="text-brand-400">Hash</span> payload = generate(data);</p>
+                        <p>store.secure(payload);</p>
+                        <p class="text-green-400">>> Success // 200 OK</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: The Registration Form -->
+        <div class="w-full xl:w-[55%] flex items-center justify-center z-30">
+            
+            <div class="epic-glass rounded-[2rem] p-8 sm:p-12 w-full max-w-[600px] relative overflow-hidden animate-slide-up" style="animation-delay: 0.2s;">
+                <!-- Inner ambient glow -->
+                <div class="absolute top-0 left-0 w-64 h-64 bg-brand-600/10 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
+
+                <div class="mb-8 text-center">
+                    <h2 class="text-3xl sm:text-4xl font-display font-bold text-white mb-3">Construct Identity</h2>
+                    <p class="text-gray-400 text-sm">
+                        Existing affiliate? <a href="/login.html" class="text-brand-400 hover:text-brand-300 font-semibold transition-colors">Access terminal</a>
+                    </p>
+                </div>
+
+                <form id="signupForm" class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-2">
+                        <div>
+                            <label class="block text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">First Name</label>
+                            <input id="firstName" type="text" placeholder="Sarah" class="dark-input w-full p-3.5 rounded-xl outline-none text-sm placeholder-gray-600" required>
+                            <p id="firstNameError" class="text-red-400 text-xs mt-1 font-medium hidden">Required parameter</p>
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Last Name</label>
+                            <input id="lastName" type="text" placeholder="Connor" class="dark-input w-full p-3.5 rounded-xl outline-none text-sm placeholder-gray-600" required>
+                            <p id="lastNameError" class="text-red-400 text-xs mt-1 font-medium hidden">Required parameter</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Email Address</label>
+                        <div class="relative flex items-center group">
+                            <div class="absolute left-4 w-5 h-5 flex items-center justify-center text-gray-500 group-focus-within:text-brand-400 transition-colors">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <input id="email" type="email" placeholder="sarah@resistance.com" class="dark-input w-full p-3.5 pl-12 rounded-xl outline-none text-sm placeholder-gray-600" required>
+                        </div>
+                        <p id="emailError" class="text-red-400 text-xs mt-1 font-medium hidden">Valid domain required</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-2">
+                        <div>
+                            <label class="block text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Registration ID</label>
+                            <input id="registryId" type="text" placeholder="ID-12345" class="dark-input w-full p-3.5 rounded-xl outline-none text-sm placeholder-gray-600" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Institution</label>
+                            <input id="institution" type="text" placeholder="Global Tech Hub" class="dark-input w-full p-3.5 rounded-xl outline-none text-sm placeholder-gray-600" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Clearance Level (Role)</label>
+                        <div class="relative flex items-center group">
+                            <div class="absolute left-4 w-5 h-5 flex items-center justify-center text-gray-500 group-focus-within:text-brand-400 transition-colors pointer-events-none">
+                                <i class="fas fa-id-badge"></i>
+                            </div>
+                            <select id="userType" class="dark-select w-full p-3.5 pl-12 rounded-xl outline-none text-sm cursor-pointer" required>
+                                <option value="" disabled selected class="text-gray-500">Select protocol</option>
+                                <option value="student">Level 1 - Intern / Applicant</option>
+                                <option value="admin">Level 2 - Recruiter / Admin</option>
+                            </select>
+                            <div class="absolute right-4 w-5 h-5 flex items-center justify-center text-gray-500 pointer-events-none">
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </div>
+                        </div>
+                        <p id="userTypeError" class="text-red-400 text-xs mt-1 font-medium hidden">Clearance required</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-2">
+                        <div>
+                            <label class="block text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Secure Password</label>
+                            <div class="relative flex items-center group">
+                                <div class="absolute left-4 w-4 h-4 flex items-center justify-center text-gray-500 group-focus-within:text-brand-400 transition-colors">
+                                    <i class="fas fa-lock text-xs"></i>
+                                </div>
+                                <input id="password" type="password" placeholder="••••••••" class="dark-input w-full p-3.5 pl-10 pr-10 rounded-xl outline-none text-sm placeholder-gray-600" required>
+                                <button type="button" onclick="toggleVision('password', this)" class="absolute right-2 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 text-[10px] font-bold uppercase tracking-widest mb-2 ml-1">Confirm Security Key</label>
+                            <div class="relative flex items-center group">
+                                <div class="absolute left-4 w-4 h-4 flex items-center justify-center text-gray-500 group-focus-within:text-brand-400 transition-colors">
+                                    <i class="fas fa-check-double text-xs"></i>
+                                </div>
+                                <input id="confirmPassword" type="password" placeholder="••••••••" class="dark-input w-full p-3.5 pl-10 pr-10 rounded-xl outline-none text-sm placeholder-gray-600" required>
+                                <button type="button" onclick="toggleVision('confirmPassword', this)" class="absolute right-2 w-8 h-8 flex items-center justify-center text-gray-500 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition">
+                                    <i class="fas fa-eye text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Strength -->
+                    <div class="mt-1">
+                        <div class="h-1 bg-white/10 rounded-full overflow-hidden flex">
+                            <div id="strengthBar" class="h-full w-0 bg-red-500 transition-all duration-300 shadow-[0_0_10px_currentColor]"></div>
+                        </div>
+                        <div class="flex justify-between items-center mt-1.5 ml-1">
+                            <p id="strengthText" class="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Entropy</p>
+                            <p id="passwordError" class="text-red-400 text-xs font-medium hidden"></p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start gap-3 mt-4 cyber-checkbox">
+                        <div class="relative flex items-center pt-1">
+                            <input type="checkbox" id="agreeTerms" class="opacity-0 absolute h-5 w-5 cursor-pointer z-10" required>
+                            <div class="h-5 w-5 bg-black/40 border border-white/20 rounded-md transition-colors flex items-center justify-center pointer-events-none">
+                                <svg class="hidden w-3 h-3 text-white pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                        </div>
+                        <label for="agreeTerms" class="text-xs text-gray-400 leading-relaxed cursor-pointer select-none">
+                            I verify compliance with the <a href="#" onclick="event.preventDefault(); showMsg('msg', 'Terms accepted virtually.', 'info');" class="text-brand-400 hover:text-brand-300 transition">Terms of Access</a> and <a href="#" onclick="event.preventDefault(); showMsg('msg', 'Data encrypted by default.', 'info');" class="text-brand-400 hover:text-brand-300 transition">Privacy Directive</a>.
+                        </label>
+                    </div>
+
+                    <button id="signupBtn" type="submit" class="premium-btn w-full text-white font-bold py-4 rounded-xl flex justify-center items-center gap-3 mt-6 group hidden-element">
+                        <span>Initialize Account</span>
+                        <i class="fas fa-terminal text-sm group-hover:-translate-y-0.5 transition-transform"></i>
+                    </button>
+                    
+                    <div id="msg" class="hidden items-center gap-3 p-4 rounded-xl mt-4 font-medium text-sm"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- AI CHATBOT WIDGET                              -->
+    <!-- ============================================== -->
+    <button onclick="toggleChat()" class="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-tr from-brand-600 to-blue-600 text-white rounded-2xl shadow-[0_10px_30px_rgba(107,70,193,0.5)] flex items-center justify-center text-2xl hover:-translate-y-2 hover:scale-105 transition-all z-50 border border-white/20 animate-glow">
+        <i id="chatIcon" class="fas fa-robot"></i>
+    </button>
+
+    <div id="chatWindow" class="chat-widget chat-closed fixed right-8 w-[380px] epic-glass rounded-3xl z-40 flex flex-col overflow-hidden" style="height: 550px;">
+        <div class="bg-gradient-to-r from-brand-800/80 to-brand-900/80 p-5 text-white flex justify-between items-center border-b border-white/10 backdrop-blur-md">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/20 shadow-inner"><i class="fas fa-robot text-lg"></i></div>
+                <div>
+                    <h3 class="font-bold font-display text-base tracking-wide">InternBot Central</h3>
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                        <p class="text-xs text-brand-200 font-medium tracking-widest uppercase">System Online</p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/10 transition-colors"><i class="fas fa-times text-white/80"></i></button>
+        </div>
+        
+        <div id="chatMessages" class="flex-1 p-5 overflow-y-auto space-y-4 flex flex-col text-sm relative">
+            <div class="flex justify-start relative z-10 w-full animate-slide-up">
+                <div class="chat-bubble bg-white/5 border border-white/10 text-gray-200 p-4 rounded-2xl rounded-tl-sm shadow-sm leading-relaxed backdrop-blur-sm">
+                    Welcome to initialization! 🌌 Creating an account gives you direct access to the internship matrix. Ask me anything if you need guidance.
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 bg-black/40 border-t border-white/5 flex items-center gap-3 backdrop-blur-md">
+            <input type="text" id="chatInput" placeholder="Initialize query..." class="flex-1 bg-white/5 text-white text-sm p-4 rounded-2xl outline-none focus:bg-white/10 focus:ring-1 focus:ring-brand-500 transition-all border border-transparent focus:border-brand-500/50 placeholder-gray-500" onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()" class="w-12 h-12 bg-brand-600 text-white rounded-2xl flex items-center justify-center hover:bg-brand-500 transition-colors shadow-lg"><i class="fas fa-paper-plane text-sm"></i></button>
+        </div>
+    </div>
+
+
+    <script>
+        // Check if user is logged in
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                showMsg('msg', 'Active session detected. Rerouting...', 'info');
+                setTimeout(() => window.location.href = "/dashboard.html", 1000);
+            }
+        });
+
+        // Toggle Password Vision
+        function toggleVision(id, btn) {
+            const input = document.getElementById(id);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash text-xs text-gray-300';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye text-xs text-gray-500';
+            }
+        }
+
+        // Show UI Notifications safely
+        function showMsg(id, text, type) {
+            const el = document.getElementById(id);
+            if (!text) {
+                el.classList.add('hidden');
+                return;
+            }
+            
+            let icon = 'fa-info-circle';
+            let colors = 'bg-blue-500/10 border border-blue-500/20 text-blue-400';
+            
+            if (type === 'success') {
+                icon = 'fa-check-circle';
+                colors = 'bg-green-500/10 border border-green-500/20 text-green-400';
+            } else if (type === 'err') {
+                icon = 'fa-exclamation-triangle';
+                colors = 'bg-red-500/10 border border-red-500/20 text-red-400';
+            }
+
+            el.innerHTML = `<i class="fas ${icon} text-lg"></i> <span>${text}</span>`;
+            el.className = `flex items-center gap-3 p-4 rounded-xl mt-4 font-medium text-sm animate-slide-up ${colors}`;
+            el.classList.remove('hidden');
+            
+            if(type === 'info') setTimeout(() => el.classList.add('hidden'), 4000);
+        }
+
+        // Strength checker
+        document.getElementById('password').addEventListener('input', (e) => {
+            const password = e.target.value;
+            const bar = document.getElementById('strengthBar');
+            const text = document.getElementById('strengthText');
+            
+            if (password.length === 0) {
+                bar.style.width = '0%';
+                text.textContent = 'Entropy';
+                text.className = 'text-[10px] text-gray-500 font-medium uppercase tracking-wider';
+                return;
+            }
+
+            let strength = 0;
+            if (password.length >= 6) strength++;
+            if (password.length >= 10) strength++;
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-400', 'bg-emerald-500'];
+            const labels = ['Critically Weak', 'Weak', 'Acceptable', 'Strong', 'Uncrackable'];
+            
+            bar.className = `h-full transition-all duration-300 shadow-[0_0_10px_currentColor] ${colors[strength - 1] || 'bg-red-500'}`;
+            bar.style.width = `${(strength / 5) * 100}%`;
+            text.textContent = labels[strength - 1] || 'Weak';
+            text.className = `text-[10px] font-bold uppercase tracking-wider ${strength >= 3 ? 'text-green-400' : 'text-gray-400'} shadow-none drop-shadow-md shadow-[currentColor]`;
+        });
+
+        // Form Submit
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear errors
+            document.querySelectorAll('p[id$="Error"]').forEach(el => el.classList.add('hidden'));
+
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const userType = document.getElementById('userType').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const registryId = document.getElementById('registryId').value.trim();
+            const institution = document.getElementById('institution').value.trim();
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+
+            let hasError = false;
+
+            if (password.length < 6) { 
+                const pe = document.getElementById('passwordError');
+                pe.textContent = 'Min length 6'; 
+                pe.classList.remove('hidden'); 
+                hasError = true; 
+            }
+            if (password !== confirmPassword && password.length > 0) { 
+                const pe = document.getElementById('passwordError');
+                pe.textContent = 'Mismatch detected'; 
+                pe.classList.remove('hidden'); 
+                hasError = true; 
+            }
+            if (!agreeTerms) {
+                showMsg('msg', 'Terms of Access must be accepted.', 'err');
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            const signupBtn = document.getElementById('signupBtn');
+            signupBtn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> <span>Compiling...</span>';
+            signupBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true',
+                        'Bypass-Tunnel-Reminder': 'true'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ 
+                        name: `${firstName} ${lastName}`, 
+                        email, 
+                        role: userType, 
+                        password,
+                        registryId,
+                        institution
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showMsg('msg', 'Identity constructed successfully. Connecting to Matrix...', 'success');
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    localStorage.setItem('isLoggedIn', 'true');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/dashboard.html';
+                    }, 1500);
+                } else {
+                    let errorMsg = data.message || 'Initialization failed';
+                    if (data.message === 'Email already exists') {
+                        errorMsg = `Email already exists in the Matrix. <a href="/login.html" class="ml-2 inline-flex items-center gap-1 bg-white/20 hover:bg-white/30 px-3 py-1 rounded-lg text-white font-bold transition-all underline decoration-transparent hover:decoration-white"><i class="fas fa-sign-in-alt text-xs"></i> Access Terminal</a>`;
+                    }
+                    showMsg('msg', errorMsg, 'err');
+                }
+            } catch (error) {
+                console.error('Signup error:', error);
+                showMsg('msg', 'Network instability detected.', 'err');
+            } finally {
+                if(!document.getElementById('msg').classList.contains('text-green-400')) {
+                    signupBtn.innerHTML = '<span>Initialize Account</span> <i class="fas fa-terminal text-sm"></i>';
+                    signupBtn.disabled = false;
+                }
+            }
+        });
+
+        // ---------- CHATBOT LOGIC ----------
+        const chatWindow = document.getElementById("chatWindow");
+        const chatIcon = document.getElementById("chatIcon");
+        const chatMessages = document.getElementById("chatMessages");
+        const chatInput = document.getElementById("chatInput");
+        let chatOpen = false;
+
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            if(chatOpen) {
+                chatWindow.classList.replace("chat-closed", "chat-open");
+                chatIcon.classList.replace("fa-robot", "fa-chevron-down");
+                chatInput.focus();
+            } else {
+                chatWindow.classList.replace("chat-open", "chat-closed");
+                chatIcon.classList.replace("fa-chevron-down", "fa-robot");
+            }
+        }
+
+        function getSmartReply(prompt) {
+            const p = prompt.toLowerCase().trim();
+            if (/^(hi|hello|hey|hiya|howdy|sup)/.test(p))
+                return "Hey! 👋 I'm InternBot. I can help you sign up and get started with InternHub!\n\nWhat do you need help with?";
+            if (p.includes('registry') || p.includes('reg id') || p.includes('registration id'))
+                return "📋 **Registry ID** is your institutional student registration number (e.g., your college roll number or student ID).\n\nIt's used to verify your academic identity in the system.";
+            if (p.includes('institution') || p.includes('college') || p.includes('university') || p.includes('school'))
+                return "🏛️ Enter the full name of your **college or university** in the Institution field.\n\nExample: 'VIT University', 'IIT Bombay', 'Delhi University'";
+            if (p.includes('password') || p.includes('pass'))
+                return "🔐 **Password requirements:**\n• Minimum 6 characters\n• Any combination of letters, numbers, symbols\n• Keep it secure — don't share it!\n\nYou can change it later via Forgot Password.";
+            if (p.includes('register') || p.includes('signup') || p.includes('sign up') || p.includes('create') || p.includes('how to'))
+                return "✨ **How to sign up:**\n1. Enter your **Full Name**\n2. Enter your **Email** (Gmail works!)\n3. Set a **Password** (min. 6 chars)\n4. Enter your **Registry ID** (student ID)\n5. Enter your **Institution** name\n6. Click **Initialize Account**\n\nDone — you'll be redirected to your dashboard!";
+            if (p.includes('login') || p.includes('already') || p.includes('existing') || p.includes('account'))
+                return "🚀 Already have an account? Click **'Sign In'** at the top of this form to log in!";
+            if (p.includes('email') || p.includes('gmail'))
+                return "📬 Use any valid email — Gmail, Outlook, college email — all work!\n\nMake sure you remember it, as you'll use it to log in.";
+            if (p.includes('internship') || p.includes('apply') || p.includes('browse') || p.includes('role'))
+                return "💼 Once you create your account, go to the **Internships** page to browse and apply for roles!\n\nComplete your sign up first, then explore opportunities.";
+            if (p.includes('contact') || p.includes('support') || p.includes('help') || p.includes('issue'))
+                return "🆘 **Need help?**\n• Email: support@internhub.dev\n• Enterprise: corporate@internhub.dev";
+            if (p.includes('thank') || p.includes('thanks') || p.includes('great'))
+                return "😊 Happy to help! Click **Initialize Account** to complete your registration!";
+            const fallbacks = [
+                "🤔 I'm your signup assistant! Try asking:\n• **'What is Registry ID?'**\n• **'How to register?'**\n• **'Password requirements?'**",
+                "💬 I can help with:\n• Filling the signup form\n• Understanding fields like Registry ID\n• Account creation steps",
+                "✨ Need help creating your InternHub account? Ask me about any field in the form!"
+            ];
+            return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+        }
+
+        chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMessage(); });
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if(!text) return;
+            addMsg(text, 'user');
+            chatInput.value = '';
+            const loadingId = addMsg('<i class="fas fa-circle-notch fa-spin text-brand-400"></i>', 'bot');
+            await new Promise(r => setTimeout(r, 400 + Math.random() * 300));
+            document.getElementById(loadingId)?.remove();
+            addMsg(getSmartReply(text), 'bot');
+        }
+
+        function addMsg(html, sender, isError = false) {
+            const div = document.createElement('div');
+            const id = 'msg-' + Date.now() + Math.random();
+            div.id = id;
+            div.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} w-full animate-slide-up`;
+            const outer = sender === 'user'
+                ? 'bg-gradient-to-br from-brand-600 to-indigo-600 text-white shadow-md'
+                : (isError ? 'bg-red-500/10 border border-red-500/20 text-red-400' : 'bg-white/5 border border-white/10 text-gray-200 backdrop-blur-md');
+            const formatted = html
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color:#e9d5ff">$1</strong>')
+                .replace(/\n/g, '<br>');
+            div.innerHTML = `<div class="chat-bubble ${outer} p-4 rounded-2xl ${sender==='user'? 'rounded-tr-sm':'rounded-tl-sm'} leading-relaxed text-sm">${formatted}</div>`;
+            chatMessages.appendChild(div);
+            setTimeout(() => chatMessages.scrollTop = chatMessages.scrollHeight, 50);
+            return id;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Access - InternHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #080312; color: #fff; }
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body class="bg-[#080312] min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-black/40 backdrop-blur-xl border-b border-white/10 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-satellite-dish text-brand-500 text-xl"></i>
+                <span class="font-display font-bold text-2xl">InternHub Network</span>
+            </div>
+            <a href="/dashboard.html" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-bold transition-all"><i class="fas fa-arrow-left mr-2"></i>Return to Hub</a>
+        </div>
+    </nav>
+    <main class="max-w-4xl mx-auto p-10 pt-20">
+        <div class="glass-card p-12 rounded-[2rem]">
+            <h1 class="text-4xl font-display font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-indigo-400">Terms of Access</h1>
+            <p class="text-gray-400 mb-6 leading-relaxed">Revision: v4.2.1</p>
+            <div class="space-y-6 text-gray-300">
+                <h3 class="text-xl font-bold text-white">1. Core Compliance</h3>
+                <p>By accessing the InternHub Ecosystem terminal, users agree to strictly operate within approved deployment parameters. Circumvention of internship allocation algorithms is prohibited.</p>
+                <h3 class="text-xl font-bold text-white">2. Node Stability</h3>
+                <p>Accounts utilizing automated scrape-bots or unauthorized external AI to bulk-apply via our architecture will have their access revoked permanently.</p>
+                <h3 class="text-xl font-bold text-white">3. Platform Liability</h3>
+                <p>InternHub acts exclusively as the matchmaking conduit bridging emerging tech professionals to industry nodes. We do not guarantee final allocation or stipend distribution, which remains the responsibility of the host organization.</p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
