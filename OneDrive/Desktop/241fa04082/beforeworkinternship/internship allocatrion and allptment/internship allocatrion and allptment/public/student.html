@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - InternHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-lg"></i>
+                    </div>
+                    <span class="font-bold text-xl text-gray-900">InternHub</span>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="flex items-center gap-1">
+                    <a href="/student" class="px-4 py-2 rounded-lg text-sm font-medium text-blue-600 bg-blue-50">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                    </a>
+                    <a href="/profile" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+                        <i class="fas fa-user mr-2"></i>Profile
+                    </a>
+                    <a href="/internships" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+                        <i class="fas fa-briefcase mr-2"></i>Internships
+                    </a>
+                    <a href="/applications" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+                        <i class="fas fa-file-alt mr-2"></i>Applications
+                    </a>
+                    <a href="/allocation" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+                        <i class="fas fa-check-circle mr-2"></i>My Allocation
+                    </a>
+                </div>
+
+                <!-- Logout Button -->
+                <button onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-20 pb-12">
+        <div class="max-w-7xl mx-auto p-6">
+            
+            <!-- Welcome Section -->
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Welcome back, <span id="welcomeName">Student</span>!</h1>
+                    <p class="text-gray-500 mt-1">Here's your internship journey progress</p>
+                </div>
+                <button onclick="window.location.href='/internships'" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                    <i class="fas fa-search mr-2"></i>Find Internships
+                </button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <!-- Available Internships -->
+                <div class="bg-white rounded-xl shadow-md p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-briefcase text-blue-600 text-xl"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-900" id="availableCount">12</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Available Internships</p>
+                </div>
+
+                <!-- Applications Sent -->
+                <div class="bg-white rounded-xl shadow-md p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-paper-plane text-green-600 text-xl"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-900" id="applicationsCount">3</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Applications Sent</p>
+                </div>
+
+                <!-- Pending Review -->
+                <div class="bg-white rounded-xl shadow-md p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-900" id="pendingCount">2</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Pending Review</p>
+                </div>
+
+                <!-- Profile Completion -->
+                <div class="bg-white rounded-xl shadow-md p-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-user-check text-purple-600 text-xl"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-gray-900" id="completionPercent">75%</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Profile Complete</p>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Left Column - Recommended Internships -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-md">
+                        <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+                            <div>
+                                <h2 class="text-lg font-semibold text-gray-900">Recommended Internships</h2>
+                                <p class="text-sm text-gray-500">Based on your profile and preferences</p>
+                            </div>
+                            <button onclick="window.location.href='/internships'" class="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                                View All
+                            </button>
+                        </div>
+                        <div class="p-5 space-y-4" id="recommendedInternships">
+                            <!-- Internship Card 1 -->
+                            <div class="flex items-start gap-4 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition internship-card" data-id="1">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-code text-blue-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900 internship-title">Frontend Developer Intern</h3>
+                                    <p class="text-sm text-gray-500 mt-1 internship-company">TechCorp Solutions • Remote</p>
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Full-time</span>
+                                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">$800/month</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <button onclick="viewDetails(1)" class="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">
+                                        View Details
+                                    </button>
+                                    <button onclick="applyInternship(1, 'Frontend Developer Intern', 'TechCorp Solutions')" class="px-3 py-1.5 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600">
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Internship Card 2 -->
+                            <div class="flex items-start gap-4 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition internship-card" data-id="2">
+                                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-database text-purple-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900 internship-title">Data Science Intern</h3>
+                                    <p class="text-sm text-gray-500 mt-1 internship-company">Analytics Pro • New York, NY</p>
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Full-time</span>
+                                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">$1,200/month</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <button onclick="viewDetails(2)" class="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">
+                                        View Details
+                                    </button>
+                                    <button onclick="applyInternship(2, 'Data Science Intern', 'Analytics Pro')" class="px-3 py-1.5 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600">
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Internship Card 3 -->
+                            <div class="flex items-start gap-4 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:shadow-sm transition internship-card" data-id="3">
+                                <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-paint-brush text-pink-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900 internship-title">UX/UI Designer Intern</h3>
+                                    <p class="text-sm text-gray-500 mt-1 internship-company">Creative Studios • San Francisco, CA</p>
+                                    <div class="flex items-center gap-2 mt-2">
+                                        <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Part-time</span>
+                                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">$900/month</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <button onclick="viewDetails(3)" class="px-3 py-1.5 border border-gray-300 text-gray-700 rounded-lg text-sm hover:bg-gray-50">
+                                        View Details
+                                    </button>
+                                    <button onclick="applyInternship(3, 'UX/UI Designer Intern', 'Creative Studios')" class="px-3 py-1.5 bg-blue-500 text-white rounded-lg text-sm hover:bg-blue-600">
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Activity & Quick Actions -->
+                <div class="space-y-6">
+                    <!-- Recent Activity -->
+                    <div class="bg-white rounded-xl shadow-md">
+                        <div class="p-5 border-b border-gray-100">
+                            <h2 class="text-lg font-semibold text-gray-900">Recent Activity</h2>
+                        </div>
+                        <div class="p-5">
+                            <div class="space-y-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-check text-green-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Application submitted</p>
+                                        <p class="text-xs text-gray-500 mt-0.5">Frontend Developer at TechCorp</p>
+                                        <p class="text-xs text-gray-400 mt-0.5">2 hours ago</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-eye text-blue-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Profile viewed by recruiter</p>
+                                        <p class="text-xs text-gray-500 mt-0.5">Analytics Pro</p>
+                                        <p class="text-xs text-gray-400 mt-0.5">Yesterday</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <i class="fas fa-clock text-yellow-600 text-xs"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">Application under review</p>
+                                        <p class="text-xs text-gray-500 mt-0.5">UX Designer at Creative Studios</p>
+                                        <p class="text-xs text-gray-400 mt-0.5">3 days ago</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Completion Card -->
+                    <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-md p-5 text-white">
+                        <h3 class="font-semibold mb-2">Complete Your Profile</h3>
+                        <p class="text-sm text-white/80 mb-3">Add your skills and experience to get better matches</p>
+                        <div class="w-full bg-white/20 rounded-full h-2 mb-3">
+                            <div class="bg-white rounded-full h-2" style="width: 75%"></div>
+                        </div>
+                        <button onclick="window.location.href='/profile'" class="w-full py-2 bg-white text-blue-600 rounded-lg font-medium hover:bg-white/90">
+                            Update Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white font-medium hidden z-50 shadow-lg"></div>
+
+    <script src="/js/auth.js"></script>
+    <script src="/js/script.js"></script>
+    <script>
+        // Check login state and redirect if not logged in
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        if (isLoggedIn !== "true") {
+            window.location.href = "/login";
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStudentData();
+        });
+
+        // Load student data
+        async function loadStudentData() {
+            try {
+                const response = await fetch('/api/auth/current', {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('welcomeName').textContent = data.user.firstName || 'Student';
+                }
+            } catch (error) {
+                console.error('Error loading student data:', error);
+            }
+        }
+
+        // Logout function
+        async function logout() {
+            try {
+                await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+            // Clear only the isLoggedIn key and redirect
+            localStorage.removeItem("isLoggedIn");
+            window.location.href = "/login";
+        }
+
+        // Apply for internship
+        async function applyInternship(internshipId, position, company) {
+            try {
+                showToast('Submitting application...', 'info');
+                
+                const response = await fetch('/api/applications', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        internshipId: internshipId,
+                        company: company,
+                        position: position
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('Application submitted successfully!', 'success');
+                    // Update applications count
+                    const currentCount = parseInt(document.getElementById('applicationsCount').textContent);
+                    document.getElementById('applicationsCount').textContent = currentCount + 1;
+                } else {
+                    showToast(data.message || 'Failed to submit application', 'error');
+                }
+            } catch (error) {
+                console.error('Apply error:', error);
+                showToast('Error submitting application', 'error');
+            }
+        }
+
+        // View internship details
+        async function viewDetails(internshipId) {
+            try {
+                const response = await fetch(`/api/internships/${internshipId}`, {
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showInternshipModal(data.internship);
+                } else {
+                    showToast('Failed to load internship details', 'error');
+                }
+            } catch (error) {
+                console.error('View details error:', error);
+                showToast('Error loading internship details', 'error');
+            }
+        }
+
+        // Show internship details modal
+        function showInternshipModal(internship) {
+            // Create modal if it doesn't exist
+            let modal = document.getElementById('internshipModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'internshipModal';
+                modal.className = 'fixed inset-0 bg-black/50 hidden items-center justify-center z-50';
+                document.body.appendChild(modal);
+            }
+            
+            const skillsList = internship.skills ? internship.skills.map(skill => 
+                `<span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs">${skill}</span>`
+            ).join('') : '';
+            
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg w-full max-w-lg mx-4 p-6 max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-semibold text-gray-900">${internship.position}</h3>
+                        <button onclick="closeInternshipModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Company</p>
+                            <p class="font-medium text-gray-900">${internship.company}</p>
+                        </div>
+                        <div class="flex gap-4">
+                            <div>
+                                <p class="text-sm text-gray-500">Location</p>
+                                <p class="font-medium text-gray-900">${internship.location}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Type</p>
+                                <p class="font-medium text-gray-900">${internship.type}</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Stipend</p>
+                                <p class="font-medium text-gray-900">${internship.stipend}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Duration</p>
+                            <p class="font-medium text-gray-900">${internship.duration}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Description</p>
+                            <p class="text-gray-700">${internship.description || 'No description available'}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500 mb-2">Skills Required</p>
+                            <div class="flex flex-wrap gap-2">${skillsList}</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="closeInternshipModal()" class="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                            Close
+                        </button>
+                        <button onclick="applyInternship(${internship.id}, '${internship.position}', '${internship.company}'); closeInternshipModal();" class="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                            Apply Now
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Close internship modal
+        function closeInternshipModal() {
+            const modal = document.getElementById('internshipModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // Show toast
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 shadow-lg';
+            if (type === 'success') toast.classList.add('bg-green-500');
+            else if (type === 'error') toast.classList.add('bg-red-500');
+            else toast.classList.add('bg-blue-500');
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // Check auth and load data on page load
+        window.addEventListener('load', () => {
+            loadStudentData();
+        });
+    </script>
+</body>
+</html>

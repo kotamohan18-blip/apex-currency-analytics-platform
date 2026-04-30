@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - InternHub Ecosystem</title>
+    <link rel="icon" href="data:,">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { 
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    },
+                    colors: {
+                        uber: '#080312',
+                        brand: {
+                            400: '#9f7aea',
+                            500: '#805ad5',
+                            600: '#6b46c1',
+                            700: '#553c9a',
+                            900: '#322659',
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0) scale(1)' },
+                            '50%': { transform: 'translateY(-10px) scale(1.02)' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(20px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #080312; overflow-x: hidden; color: #fff; }
+        
+        .bg-mesh {
+            background-color: #080312;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(107, 70, 193, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 50% 100%, rgba(236, 72, 153, 0.1) 0%, transparent 40%),
+                radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px;
+            background-position: 0 0, 0 0, 0 0, 20px 20px;
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        .nav-link {
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05);
+        }
+        .nav-active {
+            background: rgba(124, 58, 237, 0.15);
+            color: #d8b4fe !important;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.1);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="m-0 min-h-screen bg-mesh">
+
+    <!-- Orbs -->
+    <div class="orb bg-indigo-600 w-96 h-96 top-[5%] left-[20%] animate-pulse-slow"></div>
+    <div class="orb bg-brand-500 w-80 h-80 bottom-[10%] right-[10%] animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+    <!-- Integrated Dark Navbar -->
+    <nav class="bg-uber/80 backdrop-blur-xl border-b border-white/10 fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-brand-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-brand-500/30">
+                        <i class="fas fa-satellite-dish text-white text-xl"></i>
+                    </div>
+                    <span class="font-display font-bold text-2xl tracking-wide text-white">InternHub</span>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center gap-2 bg-white/5 p-1.5 rounded-2xl border border-white/5">
+                    <a href="/dashboard.html" class="nav-active px-5 py-2.5 rounded-xl text-sm font-bold">
+                        <i class="fas fa-border-all mr-2"></i>Dashboard
+                    </a>
+                    <a href="/profile.html" class="nav-link px-5 py-2.5 rounded-xl text-sm font-medium text-gray-400">
+                        <i class="fas fa-user-astronaut mr-2"></i>Profile
+                    </a>
+                    <a href="/internships.html" class="nav-link px-5 py-2.5 rounded-xl text-sm font-medium text-gray-400">
+                        <i class="fas fa-briefcase mr-2"></i>Internships
+                    </a>
+                    <a href="/applications.html" class="nav-link px-5 py-2.5 rounded-xl text-sm font-medium text-gray-400">
+                        <i class="fas fa-file-contract mr-2"></i>Applications
+                    </a>
+                </div>
+
+                <!-- Action Button -->
+                <button onclick="logout()" class="group flex items-center gap-2 px-5 py-2.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition-all">
+                    <i class="fas fa-sign-out-alt text-sm group-hover:scale-110 transition-transform"></i>
+                    <span class="font-semibold text-sm">Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-12 relative z-10">
+        <div class="max-w-7xl mx-auto p-6">
+            
+            <!-- Welcome Section with User Data -->
+            <div class="glass-card rounded-[2.5rem] p-8 md:p-12 mb-10 flex flex-col md:flex-row items-center justify-between animate-slide-up relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-indigo-600/30 to-transparent rounded-full blur-3xl -z-10 pointer-events-none"></div>
+
+                <div class="flex items-center gap-8 z-10 w-full md:w-auto mb-6 md:mb-0">
+                    <div class="w-24 h-24 bg-gradient-to-tr from-brand-500 to-indigo-500 rounded-[2rem] flex items-center justify-center shadow-2xl shadow-indigo-500/30 transform -rotate-6 animate-float-slow border border-white/10">
+                        <i class="fas fa-terminal text-white text-4xl transform rotate-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl md:text-5xl font-display font-extrabold text-white mb-2 tracking-tight">System Access, <span id="welcomeName" class="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-indigo-400">User</span>.</h1>
+                        <p class="text-gray-400 font-mono text-sm tracking-widest uppercase">Nodes configured. Interfaces ready.</p>
+                    </div>
+                </div>
+                
+                <!-- Status Badges -->
+                <div class="flex flex-wrap md:flex-nowrap gap-4 z-10">
+                    <div class="bg-blue-500/10 border border-blue-500/30 px-5 py-3 rounded-xl flex items-center gap-3 backdrop-blur-md">
+                        <div class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></div>
+                        <span class="text-xs font-bold text-blue-300 uppercase tracking-widest">Clearance: <span id="userRole" class="text-white">Loading...</span></span>
+                    </div>
+                    <div class="bg-purple-500/10 border border-purple-500/30 px-5 py-3 rounded-xl flex items-center gap-3 backdrop-blur-md">
+                        <i class="fas fa-sitemap text-purple-400 text-xs"></i>
+                        <span class="text-xs font-bold text-purple-300 uppercase tracking-widest">Sector: <span id="userDepartment" class="text-white">Loading...</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Details Card -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <!-- Email -->
+                <div class="glass-card rounded-[2rem] p-8 group animate-slide-up" style="animation-delay: 0.1s;">
+                    <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-transform">
+                            <i class="fas fa-envelope text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-display font-bold">GMAIL</h3>
+                    </div>
+                    <p id="detailEmail" class="text-gray-300 font-mono text-sm tracking-wide">Scanning database...</p>
+                </div>
+
+                <!-- Member Since -->
+                <div class="glass-card rounded-[2rem] p-8 group animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                        <div class="w-12 h-12 bg-brand-500/20 text-brand-400 border border-brand-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 group-hover:-rotate-3 transition-transform">
+                            <i class="fas fa-clock text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-display font-bold">Uptime Access</h3>
+                    </div>
+                    <p id="detailMemberSince" class="text-gray-300 font-mono text-sm tracking-wide">Syncing timeline...</p>
+                </div>
+
+                <!-- Skills -->
+                <div class="glass-card rounded-[2rem] p-8 group animate-slide-up" style="animation-delay: 0.3s;">
+                    <div class="flex items-center gap-4 mb-6 border-b border-white/10 pb-4">
+                        <div class="w-12 h-12 bg-amber-500/20 text-amber-400 border border-amber-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i class="fas fa-microchip text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-display font-bold">Core Directives</h3>
+                    </div>
+                    <div id="detailSkills" class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs font-mono text-gray-500 animate-pulse">Querying modules...</span>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-2xl font-display font-bold text-white mb-6 uppercase tracking-widest pl-2 border-l-4 border-brand-500">Platform Telemetry</h2>
+            
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                
+                <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-between animate-slide-up" style="animation-delay: 0.4s;">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-14 h-14 bg-blue-500/10 border border-blue-500/30 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-briefcase text-blue-400 text-2xl"></i>
+                        </div>
+                        <span class="text-5xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-blue-400 to-indigo-500">12</span>
+                    </div>
+                    <p class="font-bold text-gray-400 uppercase tracking-wider text-xs">Available Internships</p>
+                </div>
+
+                <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-between relative overflow-hidden animate-slide-up" style="animation-delay: 0.5s;">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-green-500/10 rounded-full blur-2xl z-0 pointer-events-none"></div>
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <div class="w-14 h-14 bg-green-500/10 border border-green-500/30 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-paper-plane text-green-400 text-2xl -rotate-12"></i>
+                        </div>
+                        <span class="text-5xl font-display font-extrabold text-white">3</span>
+                    </div>
+                    <p class="font-bold text-gray-400 uppercase tracking-wider text-xs relative z-10">Dispatches Sent</p>
+                </div>
+
+                <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-between animate-slide-up" style="animation-delay: 0.6s;">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="w-14 h-14 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-hourglass-half text-amber-400 text-2xl"></i>
+                        </div>
+                        <span class="text-5xl font-display font-extrabold text-white">2</span>
+                    </div>
+                    <p class="font-bold text-gray-400 uppercase tracking-wider text-xs">Pending Reviews</p>
+                </div>
+
+                <div class="glass-card rounded-[2rem] p-8 flex flex-col justify-between overflow-hidden relative animate-slide-up" style="animation-delay: 0.7s;">
+                    <div class="absolute inset-0 bg-brand-600/5 z-0 pointer-events-none"></div>
+                    <!-- Cyber progress bar -->
+                    <div class="absolute bottom-0 left-0 h-1.5 bg-gradient-to-r from-brand-600 to-indigo-400 w-3/4 shadow-[0_0_10px_rgba(124,58,237,0.8)]"></div>
+                    
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <div class="w-14 h-14 bg-brand-500/10 border border-brand-500/30 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-brand-400 text-2xl"></i>
+                        </div>
+                        <span class="text-5xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-tr from-brand-400 to-indigo-300">75%</span>
+                    </div>
+                    <p class="font-bold text-gray-400 uppercase tracking-wider text-xs relative z-10">Integrity Complete</p>
+                </div>
+
+            </div>
+            
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black/50 border-t border-white/10 pt-16 pb-8 mt-12 relative z-10 w-full">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-tr from-brand-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                            <i class="fas fa-satellite-dish text-white text-sm"></i>
+                        </div>
+                        <span class="font-display font-bold text-xl tracking-wide text-white">InternHub</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-sm">
+                        InternHub is the premier talent acceleration ecosystem designed to seamlessly match the top emerging tech professionals with industry-leading organizations. Our neural networks analyze your unique skill profile to provide unparalleled access to hyper-relevant roles across the globe. Built for the future of work.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Platform</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/internships.html" class="hover:text-brand-400 transition-colors">Browse Roles</a></li>
+                        <li><a href="/applications.html" class="hover:text-brand-400 transition-colors">Track Applications</a></li>
+                        <li><a href="/profile.html" class="hover:text-brand-400 transition-colors">Upgrade Profile</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white mb-4 uppercase tracking-wider text-xs">Legal & Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/privacy.html" class="hover:text-brand-400 transition-colors">Privacy Directive</a></li>
+                        <li><a href="/terms.html" class="hover:text-brand-400 transition-colors">Terms of Access</a></li>
+                        <li><a href="/contact.html" class="hover:text-brand-400 transition-colors">Contact Command</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-gray-500 font-mono tracking-widest">&copy; 2026 InternHub Ecosystem. All rights reserved.</p>
+                <div class="flex items-center gap-4 text-gray-400">
+                    <a href="https://twitter.com/InternHub" target="_blank" class="hover:text-blue-400 transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="https://github.com" target="_blank" class="hover:text-gray-400 transition-colors"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com" target="_blank" class="hover:text-blue-600 transition-colors"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shared Chatbot Widget -->
+    <script src="/js/chatbot.js"></script>
+
+
+    <!-- Scripts -->
+    <script src="/js/dashboard.js"></script>
+    <script>
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const skillsContainer = document.getElementById('detailSkills');
+                if(skillsContainer && skillsContainer.innerHTML.includes('text-gray-500')) {
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    if(user && user.skills && user.skills.length > 0) {
+                        skillsContainer.innerHTML = user.skills.map(skill => 
+                            `<span class="px-3 py-1.5 bg-brand-500/10 border border-brand-500/20 text-brand-300 rounded-lg text-xs font-mono tracking-wider shadow-sm shadow-brand-500/10">${skill}</span>`
+                        ).join('');
+                    } else {
+                        skillsContainer.innerHTML = `<span class="text-gray-500 font-mono text-xs w-full text-center py-2 border border-dashed border-white/20 rounded-lg">NO MODULES ATTACHED</span>`;
+                    }
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

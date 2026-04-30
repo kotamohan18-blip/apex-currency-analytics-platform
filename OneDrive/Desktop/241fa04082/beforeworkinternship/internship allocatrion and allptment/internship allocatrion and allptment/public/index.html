@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InternHub - Find Your Dream Internship</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .floating { animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+
+        /* Chatbot CSS */
+        .chat-widget {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .chat-bubble {
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+        .chat-open {
+            transform: scale(1);
+            opacity: 1;
+            bottom: 80px;
+        }
+        .chat-closed {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+            bottom: 60px;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased relative">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                        <span class="text-xl">🎓</span>
+                    </div>
+                    <span class="font-bold text-xl">InternHub</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="/login.html" class="text-white/90 hover:text-white font-medium">Sign In</a>
+                    <a href="/login.html" class="bg-white text-primary-600 px-5 py-2 rounded-lg font-semibold hover:bg-white/90 transition">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20 min-h-[500px]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-5xl font-bold mb-6 leading-tight">Find Your Dream Internship Today</h1>
+                    <p class="text-xl text-white/90 mb-8">Connect with top companies, build your career, and gain real-world experience with InternHub.</p>
+                    <div class="flex gap-4">
+                        <a href="/login.html" class="bg-white text-primary-600 px-8 py-3 rounded-xl font-semibold text-lg hover:bg-white/90 transition shadow-lg">Start Free</a>
+                        <a href="/login.html" class="border-2 border-white text-white px-8 py-3 rounded-xl font-semibold text-lg hover:bg-white/10 transition">Sign In</a>
+                    </div>
+                    <div class="mt-8 flex items-center gap-6 text-white/80 text-sm">
+                        <span class="flex items-center gap-2">✓ 500+ Companies</span>
+                        <span class="flex items-center gap-2">✓ 10k+ Students</span>
+                        <span class="flex items-center gap-2">✓ 95% Success</span>
+                    </div>
+                </div>
+                <div class="hidden md:block floating">
+                    <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
+                        <div class="space-y-4">
+                            <div class="bg-white rounded-lg p-4 shadow-lg flex items-center gap-4 text-gray-800 border-l-4 border-blue-500">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-xl">💼</div>
+                                <div>
+                                    <p class="font-bold">Software Engineer Intern</p>
+                                    <p class="text-sm text-gray-500">Google • Remote</p>
+                                </div>
+                            </div>
+                            <div class="bg-white rounded-lg p-4 shadow-lg flex items-center gap-4 text-gray-800 border-l-4 border-purple-500">
+                                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-xl">📊</div>
+                                <div>
+                                    <p class="font-bold">Machine Learning Intern</p>
+                                    <p class="text-sm text-gray-500">OpenAI • Hybrid</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content continues... -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Choose InternHub?</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-12">Your gateway to professional success with AI-powered career guidance.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-left">
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="w-14 h-14 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-robot"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">AI Assistant</h3>
+                    <p class="text-gray-600">Get personalized career advice, resume tips, and interview prep instantly.</p>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-bullseye"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Smart Matches</h3>
+                    <p class="text-gray-600">Our algorithm connects you to elite opportunities matching your skillset.</p>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="w-14 h-14 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-2xl mb-6"><i class="fas fa-file-contract"></i></div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">One-Click Apply</h3>
+                    <p class="text-gray-600">Upload your resume once and apply to hundreds of roles effortlessly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!-- AI CHATBOT WIDGET                              -->
+    <!-- ============================================== -->
+
+    <!-- Floating Bubble -->
+    <button onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-tr from-indigo-600 to-purple-600 text-white rounded-full shadow-2xl shadow-indigo-300 flex items-center justify-center text-2xl hover:scale-110 transition-transform z-50 border-2 border-white">
+        <i id="chatIcon" class="fas fa-comment-dots"></i>
+    </button>
+
+    <!-- Chat Window -->
+    <div id="chatWindow" class="chat-widget chat-closed fixed right-6 w-[350px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-40 flex flex-col overflow-hidden" style="height: 500px;">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-white flex justify-between items-center shadow-md">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"><i class="fas fa-robot"></i></div>
+                <div>
+                    <h3 class="font-bold leading-tight">InternBot</h3>
+                    <p class="text-xs text-indigo-100">AI Career Advisor</p>
+                </div>
+            </div>
+            <button onclick="toggleChat()" class="text-white/80 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Messages Area -->
+        <div id="chatMessages" class="flex-1 p-4 overflow-y-auto bg-gray-50 space-y-3 flex flex-col text-sm">
+            <div class="flex justify-start">
+                <div class="chat-bubble bg-white text-gray-800 p-3 rounded-2xl rounded-tl-sm shadow-sm border border-gray-100">
+                    Hello! I'm your AI career assistant. Ask me anything about finding an internship, preparing for interviews, or writing a resume! 👋
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-4 bg-white border-t border-gray-100 flex items-center gap-2">
+            <input type="text" id="chatInput" placeholder="Type a message..." class="flex-1 bg-gray-100 text-gray-800 text-sm p-3 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 transition-all border border-transparent" onkeypress="handleEnter(event)">
+            <button onclick="sendMessage()" class="w-11 h-11 bg-indigo-600 text-white rounded-xl flex items-center justify-center hover:bg-indigo-700 transition"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+
+    <script>
+        // Check if user is logged in and safely redirect to dashboard.html
+        window.addEventListener('load', () => {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn === "true") {
+                window.location.href = "/dashboard.html";
+            }
+        });
+
+        // Chatbot Logic
+        const chatWindow = document.getElementById("chatWindow");
+        const chatIcon = document.getElementById("chatIcon");
+        const chatMessages = document.getElementById("chatMessages");
+        const chatInput = document.getElementById("chatInput");
+        
+        let isOpen = false;
+
+        function toggleChat() {
+            isOpen = !isOpen;
+            if(isOpen) {
+                chatWindow.classList.remove("chat-closed");
+                chatWindow.classList.add("chat-open");
+                chatIcon.classList.remove("fa-comment-dots");
+                chatIcon.classList.add("fa-chevron-down");
+            } else {
+                chatWindow.classList.remove("chat-open");
+                chatWindow.classList.add("chat-closed");
+                chatIcon.classList.remove("fa-chevron-down");
+                chatIcon.classList.add("fa-comment-dots");
+            }
+        }
+
+        function handleEnter(e) {
+            if(e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            if(!text) return;
+
+            // Add User Message
+            addMessage(text, 'user');
+            chatInput.value = '';
+
+            // Add Loading Indicator
+            const loadingId = addMessage('<i class="fas fa-ellipsis-h fa-fade text-gray-400"></i>', 'bot');
+
+            try {
+                const res = await fetch('/api/ai/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: text })
+                });
+                const data = await res.json();
+                
+                // Remove Loading
+                document.getElementById(loadingId).remove();
+                
+                // Add Bot Response
+                if(res.ok && data.success) {
+                    addMessage(data.text, 'bot');
+                } else {
+                    addMessage("Sorry, I'm having trouble connecting right now.", 'bot', true);
+                }
+                
+            } catch(err) {
+                document.getElementById(loadingId).remove();
+                addMessage("Network error. Please try again.", 'bot', true);
+            }
+        }
+
+        function addMessage(html, sender, isError = false) {
+            const div = document.createElement('div');
+            const id = 'msg-' + Date.now();
+            div.id = id;
+            div.className = sender === 'user' ? 'flex justify-end' : 'flex justify-start';
+            
+            const bubbleHtml = sender === 'user' 
+                ? `<div class="chat-bubble bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-sm shadow-sm">${html}</div>`
+                : `<div class="chat-bubble ${isError ? 'bg-red-50 text-red-600 border-red-100' : 'bg-white text-gray-800 border-gray-100'} p-3 rounded-2xl rounded-tl-sm shadow-sm border">${html.replace(/\n/g, '<br>')}</div>`;
+                
+            div.innerHTML = bubbleHtml;
+            chatMessages.appendChild(div);
+            
+            // Auto scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return id;
+        }
+    </script>
+</body>
+</html>

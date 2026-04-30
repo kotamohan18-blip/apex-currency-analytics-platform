@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Allocation - InternHub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fce7f3; background-image: radial-gradient(at 40% 20%, hsla(253,16%,7%,1) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(189,100%,56%,1) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(355,100%,93%,1) 0px, transparent 50%), radial-gradient(at 80% 50%, hsla(340,100%,76%,1) 0px, transparent 50%), radial-gradient(at 0% 100%, hsla(22,100%,77%,1) 0px, transparent 50%), radial-gradient(at 80% 100%, hsla(242,100%,70%,1) 0px, transparent 50%), radial-gradient(at 0% 0%, hsla(343,100%,76%,1) 0px, transparent 50%); background-attachment: fixed; }
+        h1, h2, h3, .nav-logo { font-family: 'Outfit', sans-serif; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    </style>
+</head>
+<body class="m-0 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b border-white/50 fixed top-0 left-0 right-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-200">
+                        <i class="fas fa-graduation-cap text-white text-lg"></i>
+                    </div>
+                    <span class="nav-logo font-bold text-2xl text-gray-900 tracking-tight">InternHub</span>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="flex items-center gap-2">
+                    <a href="/dashboard.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                    </a>
+                    <a href="/profile.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                        <i class="fas fa-user mr-2"></i>Profile
+                    </a>
+                    <a href="/internships.html" class="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100/80 transition">
+                        <i class="fas fa-briefcase mr-2"></i>Internships
+                    </a>
+                    <a href="/allocation.html" class="px-4 py-2 rounded-lg text-sm font-bold text-indigo-700 bg-indigo-50/80 shadow-sm border border-indigo-100 transition">
+                        <i class="fas fa-check-circle mr-2"></i>Allocation
+                    </a>
+                </div>
+
+                <!-- Logout Button -->
+                <button onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50/80 rounded-lg transition">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="hidden sm:inline">Logout</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-28 pb-12 relative z-10">
+        <div class="max-w-4xl mx-auto p-6">
+            
+            <!-- Page Header -->
+            <div class="mb-8 text-center bg-white/40 p-8 rounded-3xl backdrop-blur-md border border-white/60 shadow-sm">
+                <div class="w-16 h-16 bg-gradient-to-tr from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg shadow-green-200 mx-auto mb-4 rotate-3">
+                    <i class="fas fa-award text-white text-3xl -rotate-3"></i>
+                </div>
+                <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">My Official Allocation</h1>
+                <p class="text-gray-700 font-medium text-lg">Your finalized internship placement</p>
+            </div>
+
+            <!-- Allocation Status Card -->
+            <div class="glass-card rounded-3xl p-8 mb-8 relative overflow-hidden">
+                <div class="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-gray-900 tracking-tight">Allocation Status</h2>
+                        </div>
+                    </div>
+                    <span id="allocationPill" class="px-4 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm font-bold uppercase tracking-wide">Evaluating</span>
+                </div>
+
+                <!-- Allocation Details Box -->
+                <div id="allocationDetails" class="space-y-4">
+                    <div class="text-center py-12 bg-gray-50/50 rounded-2xl border border-gray-100">
+                        <i class="fas fa-spinner fa-spin text-3xl text-indigo-400 mb-4"></i>
+                        <p class="text-gray-600 font-bold mb-1">Checking Records...</p>
+                        <p class="text-sm text-gray-400">Loading your official allocation from the server</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Allocation Timeline -->
+            <div class="glass-card rounded-3xl p-8">
+                <h3 class="text-xl font-bold text-gray-900 tracking-tight mb-6 flex items-center gap-2 border-b border-gray-100 pb-4">
+                    <i class="fas fa-route text-indigo-500"></i> The Journey
+                </h3>
+                <div class="space-y-6 relative ml-2">
+                    <div class="absolute left-4 top-4 bottom-4 w-0.5 bg-gray-200 z-0"></div> <!-- Timeline line -->
+                    
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border-2 border-white">
+                            <i class="fas fa-paper-plane text-blue-600 text-sm"></i>
+                        </div>
+                        <div class="bg-white/60 p-4 rounded-xl border border-gray-100 flex-1">
+                            <p class="font-bold text-gray-900">Applications Submitted</p>
+                            <p class="text-sm text-gray-500 font-medium">Your resume and applications are registered</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border-2 border-white mt-2">
+                            <i class="fas fa-clock text-yellow-600 text-sm"></i>
+                        </div>
+                        <div class="bg-white/60 p-4 rounded-xl border border-gray-100 flex-1">
+                            <p class="font-bold text-gray-900">Under Review</p>
+                            <p class="text-sm text-gray-500 font-medium">Companies are evaluating your profile</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div id="timelineEndIcon" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border-2 border-white mt-2 transition-colors">
+                            <i id="timelineEndFa" class="fas fa-hourglass-half text-gray-400 text-sm"></i>
+                        </div>
+                        <div id="timelineEndBox" class="bg-white/60 p-4 rounded-xl border border-gray-100 flex-1 transition-colors">
+                            <p id="timelineEndTitle" class="font-bold text-gray-500">Allocation Pending</p>
+                            <p id="timelineEndDesc" class="text-sm text-gray-400 font-medium">Waiting for final system placement</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Auth check mapped accurately
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+        const token = localStorage.getItem("token");
+        if (isLoggedIn !== "true" || !token) {
+            window.location.href = "/login.html";
+        }
+
+        async function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("token");
+            window.location.href = "/login.html";
+        }
+
+        async function loadAllocation() {
+            const container = document.getElementById('allocationDetails');
+            const pill = document.getElementById('allocationPill');
+            
+            try {
+                const response = await fetch('/api/applications/my-allocation', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                const data = await response.json();
+
+                if (!data.success || !data.allocated) {
+                    container.innerHTML = `
+                        <div class="text-center py-12 bg-white/50 rounded-2xl border border-gray-100">
+                            <i class="fas fa-inbox text-gray-300 text-5xl mb-4 block"></i>
+                            <p class="text-gray-600 font-bold text-lg mb-1">No allocation matched yet.</p>
+                            <p class="text-sm text-gray-500 font-medium">Your official placement drops here once companies complete selections.</p>
+                        </div>`;
+                    pill.className = "px-4 py-1.5 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-bold uppercase tracking-wide border border-yellow-200 shadow-sm";
+                    pill.textContent = "Pending";
+                    return;
+                }
+
+                // If allocated successfully
+                pill.className = "px-4 py-1.5 bg-green-100 text-green-800 rounded-lg text-sm font-bold uppercase tracking-wide border border-green-200 shadow-sm";
+                pill.textContent = "Officially Placed";
+                
+                // Update timeline UI dynamically
+                document.getElementById('timelineEndIcon').className = "w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border-2 border-white mt-2";
+                document.getElementById('timelineEndFa').className = "fas fa-check text-green-600 text-sm";
+                document.getElementById('timelineEndBox').className = "bg-green-50/50 p-4 rounded-xl border border-green-100 flex-1";
+                document.getElementById('timelineEndTitle').className = "font-bold text-green-800";
+                document.getElementById('timelineEndTitle').textContent = "Allocated Successfully";
+                document.getElementById('timelineEndDesc').className = "text-sm text-green-600 font-medium";
+                document.getElementById('timelineEndDesc').textContent = "You have been matched entirely!";
+
+                const a = data.allocation;
+                const i = a.internship;
+
+                container.innerHTML = `
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-8 shadow-sm relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-green-400 rounded-full blur-3xl opacity-20"></div>
+                        <h3 class="text-2xl font-extrabold text-gray-900 tracking-tight leading-none mb-1">${i?.title || 'Unknown Role'}</h3>
+                        <p class="text-green-700 font-bold text-lg mb-6">${i?.company || 'Unknown Company'}</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white/70 p-6 rounded-xl border border-white/50 backdrop-blur-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600"><i class="fas fa-map-marker-alt"></i></div>
+                                <div><p class="text-xs text-gray-400 font-bold uppercase">Location</p><p class="text-gray-900 font-semibold">${i?.location || 'Remote'}</p></div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600"><i class="fas fa-clock"></i></div>
+                                <div><p class="text-xs text-gray-400 font-bold uppercase">Duration</p><p class="text-gray-900 font-semibold">${i?.duration || 'Unknown'}</p></div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600"><i class="fas fa-money-bill-wave"></i></div>
+                                <div><p class="text-xs text-gray-400 font-bold uppercase">Stipend</p><p class="text-gray-900 font-semibold">${i?.stipend || 'Unpaid'}</p></div>
+                            </div>
+                        </div>
+                    </div>`;
+
+            } catch (error) {
+                container.innerHTML = '<div class="text-red-500 font-bold text-center py-6 bg-red-50 rounded-xl">Error fetching allocation data.</div>';
+            }
+        }
+
+        // Initialize script
+        document.addEventListener('DOMContentLoaded', loadAllocation);
+    </script>
+</body>
+</html>
