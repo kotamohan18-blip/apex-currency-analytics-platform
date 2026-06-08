@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign in to your ApexCurrency account to view conversion history, track currency watchlists, and manage alerts.">
+  <title>Login | ApexCurrency Platform</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <a href="/" class="logo" id="nav-logo">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>ApexCurrency</span>
+      </a>
+      
+      <nav>
+        <ul class="nav-links" id="navbar-links">
+          <!-- Dynamic navigation based on auth status -->
+          <li><a class="nav-item" href="/">Home</a></li>
+          <li><a class="nav-item active" href="/login">Login</a></li>
+          <li><a class="nav-item" href="/register" style="background: var(--color-primary); color: white; border-radius: var(--border-radius-sm);">Register</a></li>
+        </ul>
+      </nav>
+      
+      <div class="nav-actions">
+        <!-- Theme Switch Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Login Area -->
+  <main class="container auth-wrapper">
+    <div class="card auth-card" id="login-panel">
+      
+      <div class="auth-header">
+        <h2>Welcome Back</h2>
+        <p>Access your saved currency portfolio & history</p>
+      </div>
+
+      <form id="login-form">
+        <!-- Email Input -->
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-envelope" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+            <input type="email" id="email" class="form-control" placeholder="name@domain.com" required style="padding-left: 44px;">
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div style="position: relative;">
+            <i class="fa-solid fa-lock" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+            <input type="password" id="password" class="form-control" placeholder="••••••••" required style="padding-left: 44px;">
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="login-submit-btn">
+          Sign In
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <p>Don't have an account? <a href="/register">Sign up now</a></p>
+      </div>
+      
+    </div>
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 ApexCurrency Platform. Build for resume portfolio. Powered by ExchangeRate-API.</p>
+    </div>
+  </footer>
+
+  <!-- Custom Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

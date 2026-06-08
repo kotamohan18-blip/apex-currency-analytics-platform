@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage your personal currency workspace, review history logs, configure rate alert thresholds, and watchlist currencies.">
+  <title>User Dashboard | ApexCurrency Platform</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <a href="/" class="logo" id="nav-logo">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>ApexCurrency</span>
+      </a>
+      
+      <nav>
+        <ul class="nav-links" id="navbar-links">
+          <!-- Dynamic navigation based on auth status -->
+          <li><a class="nav-item" href="/">Home</a></li>
+          <li><a class="nav-item active" href="/dashboard">Dashboard</a></li>
+          <li><a class="nav-item" href="/profile">Profile</a></li>
+          <li><button class="nav-item btn-secondary" onclick="logoutUser()" style="border: none; background: transparent; font-family: inherit; font-size: inherit;">Logout</button></li>
+        </ul>
+      </nav>
+      
+      <div class="nav-actions">
+        <!-- Theme Switch Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Workspace -->
+  <main class="container">
+    
+    <!-- Greeting Welcome Header -->
+    <section class="dashboard-header">
+      <div class="welcome-widget">
+        <h1>Welcome, <span id="welcome-user" style="color: var(--color-primary);">User</span>!</h1>
+        <p>Analyze your currency portfolio, track rates, and configure instant alert triggers.</p>
+      </div>
+    </section>
+
+    <!-- Top Statistical Indicator Cards -->
+    <section class="dashboard-stats-row" style="margin-top: 24px;">
+      
+      <!-- Total Conversions Stat -->
+      <div class="card dash-stat-card" id="stat-total-conversions-card">
+        <div class="dash-stat-icon">
+          <i class="fa-solid fa-arrows-spin"></i>
+        </div>
+        <div class="dash-stat-info">
+          <span class="dash-stat-label">Total Conversions</span>
+          <span class="dash-stat-value" id="stat-total-conversions">0</span>
+        </div>
+      </div>
+
+      <!-- Favorite Currency Pair Stat -->
+      <div class="card dash-stat-card" id="stat-favorite-pair-card">
+        <div class="dash-stat-icon">
+          <i class="fa-solid fa-heart"></i>
+        </div>
+        <div class="dash-stat-info">
+          <span class="dash-stat-label">Favorite Pair</span>
+          <span class="dash-stat-value" id="stat-favorite-pair">N/A</span>
+        </div>
+      </div>
+
+      <!-- Live Market Base Status (USD) -->
+      <div class="card dash-stat-card" id="stat-base-status-card">
+        <div class="dash-stat-icon">
+          <i class="fa-solid fa-circle-nodes"></i>
+        </div>
+        <div class="dash-stat-info">
+          <span class="dash-stat-label">Market Base</span>
+          <span class="dash-stat-value">USD</span>
+        </div>
+      </div>
+
+      <!-- Profile Workspace Status -->
+      <div class="card dash-stat-card" id="stat-alerts-status-card">
+        <div class="dash-stat-icon" style="background-color: var(--color-success-light); color: var(--color-success);">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div class="dash-stat-info">
+          <span class="dash-stat-label">Security Shield</span>
+          <span class="dash-stat-value" style="font-size: 0.95rem; color: var(--color-success);">Active (JWT)</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Main Dashboard Body (Grid Split) -->
+    <div class="dashboard-grid">
+      
+      <!-- Main Workspace Panel (Col 8) -->
+      <div class="dash-main-col" style="display: flex; flex-direction: column; gap: 24px;">
+        
+        <!-- Favorite Currency Pairs Section -->
+        <div class="card" id="dashboard-favorites-section">
+          <h2 class="card-title">
+            <span>Favorite Pairs</span>
+            <i class="fa-solid fa-star" style="color: var(--color-warning);"></i>
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 16px;">Quick-access conversion grid. Click any pair to run conversion immediately on home page.</p>
+          
+          <!-- Favorites Card Grid -->
+          <div class="favorites-grid" id="favorites-grid">
+            <!-- Dynamic favorites loaded from JS -->
+            <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: 0.88rem;">Loading favorites...</div>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+
+          <!-- Add Favorite Pair Form Row -->
+          <form id="add-fav-form" style="display:flex; flex-direction:column; gap:16px;">
+            <h3 style="font-size: 0.95rem; font-weight: 700;">Add Favorite Currency Pair</h3>
+            
+            <div style="display:flex; flex-direction:row; gap:12px; align-items:flex-end; flex-wrap:wrap;">
+              <!-- From select -->
+              <div class="form-group" style="flex:1; min-width:140px; margin:0;">
+                <label class="form-label">From</label>
+                <div class="custom-select-wrapper">
+                  <button type="button" id="fav-from-trigger" class="select-trigger" data-value="USD">
+                    <span class="selected-value">
+                      <img class="currency-flag-img" src="https://flagcdn.com/w40/us.png" alt="USD">
+                      <span style="font-weight: 700;">USD</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--text-secondary);"></i>
+                  </button>
+                  <div id="fav-from-dropdown" class="select-dropdown">
+                    <div class="search-box-container">
+                      <input type="text" id="fav-from-search" class="search-box-input" placeholder="Search currency...">
+                    </div>
+                    <ul id="fav-from-options" class="select-options-list"></ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- To select -->
+              <div class="form-group" style="flex:1; min-width:140px; margin:0;">
+                <label class="form-label">To</label>
+                <div class="custom-select-wrapper">
+                  <button type="button" id="fav-to-trigger" class="select-trigger" data-value="EUR">
+                    <span class="selected-value">
+                      <img class="currency-flag-img" src="https://flagcdn.com/w40/eu.png" alt="EUR">
+                      <span style="font-weight: 700;">EUR</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--text-secondary);"></i>
+                  </button>
+                  <div id="fav-to-dropdown" class="select-dropdown">
+                    <div class="search-box-container">
+                      <input type="text" id="fav-to-search" class="search-box-input" placeholder="Search currency...">
+                    </div>
+                    <ul id="fav-to-options" class="select-options-list"></ul>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-outline" style="height:46px;">
+                <i class="fa-solid fa-plus"></i> Save Pair
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Conversion History Table Card -->
+        <div class="card" id="dashboard-history-section">
+          <h2 class="card-title">
+            <span>Conversion History</span>
+            <i class="fa-solid fa-history"></i>
+          </h2>
+
+          <div class="history-controls">
+            <!-- Search Text -->
+            <div class="history-search-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="history-search" class="form-control" placeholder="Search by currency...">
+            </div>
+
+            <!-- Clear button -->
+            <button id="btn-clear-history" class="btn btn-secondary" style="font-size: 0.82rem; padding: 8px 14px;">
+              <i class="fa-solid fa-trash-can"></i> Clear All
+            </button>
+          </div>
+
+          <!-- Table Wrapper -->
+          <div class="table-wrapper">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Source Value</th>
+                  <th>Conversion Output</th>
+                  <th>Exchange Rate</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <!-- Dynamic history logs loaded from JS -->
+                <tr>
+                  <td colspan="5" class="history-empty-state">
+                    <div class="spinner spinner-primary"></div>
+                    <p>Loading conversion log history...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Dashboard Sidebar Panel (Col 4) -->
+      <div class="dash-sidebar-col" style="display: flex; flex-direction: column; gap: 24px;">
+        
+        <!-- Watchlist Currencies Panel -->
+        <div class="card" id="dashboard-watchlist-section">
+          <h2 class="card-title">
+            <span>Currency Watchlist</span>
+            <i class="fa-solid fa-chart-line"></i>
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 16px;">Track live rates of select currencies directly against USD.</p>
+
+          <!-- Watchlist Item Stack -->
+          <div class="watchlist-stack" id="watchlist-stack">
+            <!-- Dynamic watchlist loaded from JS -->
+            <div style="text-align: center; color: var(--text-muted); font-size: 0.88rem; padding: 20px;">Loading watchlist...</div>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+
+          <!-- Add to Watchlist Form -->
+          <form id="add-watch-form" style="display:flex; flex-direction:column; gap:10px;">
+            <label class="form-label" style="font-weight:700;">Add Currency to Watchlist</label>
+            <div style="display:flex; gap:10px; align-items:stretch;">
+              <div class="custom-select-wrapper" style="flex:1;">
+                <button type="button" id="watch-trigger" class="select-trigger" data-value="GBP">
+                  <span class="selected-value">
+                    <img class="currency-flag-img" src="https://flagcdn.com/w40/gb.png" alt="GBP">
+                    <span style="font-weight: 700;">GBP</span>
+                  </span>
+                  <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--text-secondary);"></i>
+                </button>
+                <div id="watch-dropdown" class="select-dropdown">
+                  <div class="search-box-container">
+                    <input type="text" id="watch-search" class="search-box-input" placeholder="Search currency...">
+                  </div>
+                  <ul id="watch-options" class="select-options-list"></ul>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Custom Rate Alerts Manager Panel -->
+        <div class="card rate-alerts-card" id="dashboard-alerts-section">
+          <h2 class="card-title">
+            <span>Rate Alerts</span>
+            <i class="fa-solid fa-bell"></i>
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 16px;">Create threshold triggers and get notified when target rates are breached.</p>
+
+          <!-- Create Alert Form -->
+          <form id="add-alert-form" class="alert-form">
+            
+            <!-- From selector -->
+            <div class="form-group">
+              <label class="form-label">Base</label>
+              <div class="custom-select-wrapper">
+                <button type="button" id="alert-from-trigger" class="select-trigger" data-value="USD" style="padding: 10px 12px;">
+                  <span class="selected-value">
+                    <img class="currency-flag-img" src="https://flagcdn.com/w40/us.png" alt="USD">
+                    <span style="font-weight: 700; font-size: 0.88rem;">USD</span>
+                  </span>
+                  <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-secondary);"></i>
+                </button>
+                <div id="alert-from-dropdown" class="select-dropdown">
+                  <div class="search-box-container">
+                    <input type="text" id="alert-from-search" class="search-box-input" placeholder="Search base...">
+                  </div>
+                  <ul id="alert-from-options" class="select-options-list"></ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Target selector -->
+            <div class="form-group">
+              <label class="form-label">Target</label>
+              <div class="custom-select-wrapper">
+                <button type="button" id="alert-to-trigger" class="select-trigger" data-value="INR" style="padding: 10px 12px;">
+                  <span class="selected-value">
+                    <img class="currency-flag-img" src="https://flagcdn.com/w40/in.png" alt="INR">
+                    <span style="font-weight: 700; font-size: 0.88rem;">INR</span>
+                  </span>
+                  <i class="fa-solid fa-chevron-down" style="font-size: 0.75rem; color: var(--text-secondary);"></i>
+                </button>
+                <div id="alert-to-dropdown" class="select-dropdown">
+                  <div class="search-box-container">
+                    <input type="text" id="alert-to-search" class="search-box-input" placeholder="Search target...">
+                  </div>
+                  <ul id="alert-to-options" class="select-options-list"></ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Condition selection -->
+            <div class="form-group">
+              <label class="form-label" for="alert-condition">Trigger Condition</label>
+              <select id="alert-condition" class="form-control" style="padding: 10px 12px;">
+                <option value="GREATER_THAN">Rises Above (&gt;)</option>
+                <option value="LESS_THAN">Falls Below (&lt;)</option>
+              </select>
+            </div>
+
+            <!-- Target value -->
+            <div class="form-group">
+              <label class="form-label" for="alert-value">Threshold Value</label>
+              <input type="number" id="alert-value" class="form-control" placeholder="Target (e.g. 90.00)" step="any" min="0.0001" style="padding: 10px 12px;">
+            </div>
+
+            <!-- Submit trigger -->
+            <button type="submit" class="btn btn-primary alert-form-full" style="width: 100%;">
+              <i class="fa-solid fa-bell-plus"></i> Set Trigger Alert
+            </button>
+
+          </form>
+
+          <hr style="border: none; border-top: 1px solid var(--border-color); margin: 20px 0;">
+
+          <!-- Alerts list grid -->
+          <h3 style="font-size: 0.95rem; font-weight: 700;">Configured Rate Alerts</h3>
+          <div class="alerts-list" id="alerts-list">
+            <!-- Dynamic alerts loaded from JS -->
+            <div style="text-align: center; color: var(--text-muted); font-size: 0.88rem; padding: 20px;">Loading alerts...</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 ApexCurrency Platform. Build for resume portfolio. Powered by ExchangeRate-API.</p>
+    </div>
+  </footer>
+
+  <!-- Custom Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
