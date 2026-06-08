@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Exchange rate analytics, real-time conversion history, and customizable alerts for 150+ global currencies.">
+  <title>ApexCurrency | Live Currency Analytics & Conversion Platform</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Live Marquee Currency Ticker -->
+  <div class="marquee-container" id="marquee-ticker">
+    <div class="marquee-content" id="marquee-track">
+      <!-- Dynamic streams loaded from JS -->
+      <span class="marquee-item">Loading live currency tickers...</span>
+    </div>
+  </div>
+
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <a href="/" class="logo" id="nav-logo">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>ApexCurrency</span>
+      </a>
+      
+      <nav>
+        <ul class="nav-links" id="navbar-links">
+          <!-- Dynamic navigation based on auth status -->
+          <li><a class="nav-item" href="/">Home</a></li>
+          <li><a class="nav-item" href="/login">Login</a></li>
+          <li><a class="nav-item" href="/register">Register</a></li>
+        </ul>
+      </nav>
+      
+      <div class="nav-actions">
+        <!-- Theme Switch Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Conversion Workspace -->
+  <main class="container">
+    
+    <!-- Hero / Welcome Header -->
+    <section class="hero-section">
+      <h1 class="hero-title" id="main-heading">Real-Time Currency Conversions & Analytics</h1>
+      <p class="hero-subtitle">Convert between 150+ currencies instantly with premium market charting, yesterday comparison stats, and rate triggers.</p>
+    </section>
+
+    <!-- Public Conversion & Analytical Grid -->
+    <section class="main-converter-grid">
+      
+      <!-- Converter Card -->
+      <div class="card converter-card" id="converter-workspace">
+        <h2 class="card-title">
+          <span>Currency Converter</span>
+          <i class="fa-solid fa-money-bill-transfer"></i>
+        </h2>
+        
+        <!-- Input Row (Amount, From, Swap, To) -->
+        <div class="converter-form-row">
+          <div class="form-group converter-amount-group">
+            <label class="form-label" for="amount">Amount to Convert</label>
+            <input type="number" id="amount" class="form-control" placeholder="Enter amount (e.g. 1000)" value="1.00" min="0.01" step="any">
+          </div>
+          
+          <!-- From Selector -->
+          <div class="form-group converter-select-group">
+            <label class="form-label">From</label>
+            <div class="custom-select-wrapper">
+              <button id="from-trigger" class="select-trigger" data-value="USD">
+                <span class="selected-value">
+                  <img class="currency-flag-img" src="https://flagcdn.com/w40/us.png" alt="USD">
+                  <span style="font-weight: 700;">USD</span>
+                </span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--text-secondary);"></i>
+              </button>
+              
+              <div id="from-dropdown" class="select-dropdown">
+                <div class="search-box-container">
+                  <input type="text" id="from-search" class="search-box-input" placeholder="Search currency code or name...">
+                </div>
+                <ul id="from-options" class="select-options-list"></ul>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Swap Button -->
+          <div class="swap-btn-container">
+            <button id="btn-swap" class="btn-swap" aria-label="Swap Currencies" title="Swap currencies">
+              <i class="fa-solid fa-right-left"></i>
+            </button>
+          </div>
+          
+          <!-- To Selector -->
+          <div class="form-group converter-select-group">
+            <label class="form-label">To</label>
+            <div class="custom-select-wrapper">
+              <button id="to-trigger" class="select-trigger" data-value="EUR">
+                <span class="selected-value">
+                  <img class="currency-flag-img" src="https://flagcdn.com/w40/eu.png" alt="EUR">
+                  <span style="font-weight: 700;">EUR</span>
+                </span>
+                <i class="fa-solid fa-chevron-down" style="font-size: 0.8rem; color: var(--text-secondary);"></i>
+              </button>
+              
+              <div id="to-dropdown" class="select-dropdown">
+                <div class="search-box-container">
+                  <input type="text" id="to-search" class="search-box-input" placeholder="Search currency code or name...">
+                </div>
+                <ul id="to-options" class="select-options-list"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Results Panel -->
+        <div class="result-display-area" id="result-box">
+          <span class="result-label">Conversion Result</span>
+          <div class="result-value" id="result-value">0.00 EUR</div>
+          <div class="result-rate" id="result-rate">Loading exchange rate conversion...</div>
+        </div>
+      </div>
+
+      <!-- Live Analytics Sidebar -->
+      <div class="analytics-grid">
+        
+        <!-- Yesterday comparison statistics -->
+        <div class="card analytic-card" id="analytics-yesterday-card">
+          <h2 class="card-title">
+            <span>Exchange Analytics</span>
+            <i class="fa-solid fa-arrow-trend-up"></i>
+          </h2>
+          
+          <div class="analytic-meta-row">
+            <img id="from-flag" class="flag-indicator" src="https://flagcdn.com/w40/us.png" alt="From">
+            <span id="from-currency-name">United States Dollar ($)</span>
+          </div>
+          <div style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">compared to</div>
+          <div class="analytic-meta-row">
+            <img id="to-flag" class="flag-indicator" src="https://flagcdn.com/w40/eu.png" alt="To">
+            <span id="to-currency-name">Euro (€)</span>
+          </div>
+
+          <hr style="border: none; border-top: 1px solid var(--border-color); margin: 6px 0;">
+
+          <div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px;">Current Rate</div>
+            <div class="analytic-value" id="analytics-current-rate">0.0000</div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px;">Yesterday's Rate</div>
+            <div style="font-size: 1.15rem; font-weight: 600; color: var(--text-secondary);" id="analytics-yesterday-rate">0.0000</div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px;">Daily Change</div>
+            <div class="analytic-change-row" id="analytics-change">
+              <i class="fa-solid fa-arrow-trend-up"></i> 0.0000 <span class="change-pill">0.00%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick navigation CTA card -->
+        <div class="card" style="display:flex; flex-direction:column; justify-content:center; text-align:center; gap:12px;" id="promo-cta-card">
+          <i class="fa-solid fa-shield-halved" style="font-size: 2.25rem; color: var(--color-primary);"></i>
+          <h3 style="font-size: 1.2rem; font-weight: 700;">Save History & Watch Currencies</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); max-width: 240px; margin: 0 auto;">Create a free profile to log conversions, configure custom rate alerts, and save favorite pairs.</p>
+          <a href="/register" class="btn btn-primary" style="margin-top: 8px;">Create Account</a>
+        </div>
+      </div>
+      
+    </section>
+
+    <!-- History Chart Card -->
+    <section style="margin-top: 30px;">
+      <div class="card" style="position: relative;" id="chart-section-card">
+        <!-- Loader Skeleton -->
+        <div class="loading-overlay" id="chart-loader">
+          <div class="spinner spinner-primary"></div>
+        </div>
+
+        <div class="chart-header-row">
+          <div class="chart-header-info">
+            <div class="chart-pair-container">
+              <span id="chart-pair-title" class="chart-pair-title">USD → EUR</span>
+              <span id="chart-trend-badge" class="chart-trend-badge trend-positive" style="display: none;">▲ +0.00%</span>
+            </div>
+            <h2 class="chart-section-title">Historical Performance</h2>
+          </div>
+          
+          <!-- Tab selector -->
+          <div class="chart-tabs-wrapper">
+            <div class="chart-tabs">
+              <button id="tab-7d" class="chart-tab">7 Days</button>
+              <button id="tab-30d" class="chart-tab active">30 Days</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State Container -->
+        <div id="chart-empty-state" class="chart-empty-state">
+          <i class="fa-solid fa-chart-line-slash"></i>
+          <h3>No historical data available</h3>
+          <p>We couldn't retrieve historical exchange rates for this pair. Try selecting another pair or period.</p>
+        </div>
+
+        <!-- Chart Canvas -->
+        <div class="canvas-container">
+          <canvas id="history-chart"></canvas>
+        </div>
+
+        <!-- Statistics Summary Grid -->
+        <div class="chart-stats-summary" id="chart-stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">Current Rate</div>
+            <div class="stat-value" id="stat-current">0.00</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Highest Rate</div>
+            <div class="stat-value" id="stat-high">0.0000</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Lowest Rate</div>
+            <div class="stat-value" id="stat-low">0.0000</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Average Rate</div>
+            <div class="stat-value" id="stat-avg">0.0000</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 ApexCurrency Platform. Build for resume portfolio. Powered by ExchangeRate-API.</p>
+    </div>
+  </footer>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/converter.js"></script>
+</body>
+</html>

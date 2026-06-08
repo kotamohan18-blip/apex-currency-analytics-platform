@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View and update your profile details and manage credentials on the ApexCurrency Platform.">
+  <title>User Profile | ApexCurrency Platform</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <div class="container navbar">
+      <a href="/" class="logo" id="nav-logo">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>ApexCurrency</span>
+      </a>
+      
+      <nav>
+        <ul class="nav-links" id="navbar-links">
+          <!-- Dynamic navigation based on auth status -->
+          <li><a class="nav-item" href="/">Home</a></li>
+          <li><a class="nav-item" href="/dashboard">Dashboard</a></li>
+          <li><a class="nav-item active" href="/profile">Profile</a></li>
+          <li><button class="nav-item btn-secondary" onclick="logoutUser()" style="border: none; background: transparent; font-family: inherit; font-size: inherit;">Logout</button></li>
+        </ul>
+      </nav>
+      
+      <div class="nav-actions">
+        <!-- Theme Switch Toggle -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" title="Toggle Light/Dark Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Profile Workspace -->
+  <main class="container">
+    
+    <!-- Title Area -->
+    <section class="dashboard-header">
+      <div class="welcome-widget">
+        <h1 id="profile-heading">Profile Settings</h1>
+        <p>Manage your personal profile settings and platform credentials.</p>
+      </div>
+    </section>
+
+    <!-- Profile Grid Layout -->
+    <div class="profile-grid">
+      
+      <!-- Left Summary Card Column (Col 4) -->
+      <div class="profile-summary-card card" id="profile-summary-card">
+        <div class="profile-avatar" id="summary-avatar-initials">US</div>
+        <h2 class="profile-summary-name" id="summary-card-name">User Profile</h2>
+        <span class="profile-summary-email" id="summary-card-email">user@domain.com</span>
+        
+        <div class="profile-summary-meta">
+          <span id="summary-created-date">Member since June 2026</span>
+        </div>
+      </div>
+
+      <!-- Right Edit Forms Column (Col 8) -->
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        
+        <!-- Profile details modification form -->
+        <div class="card" id="profile-details-card">
+          <h2 class="card-title">
+            <span>Account Details</span>
+            <i class="fa-solid fa-user-gear"></i>
+          </h2>
+
+          <form id="profile-details-form">
+            <!-- Username -->
+            <div class="form-group">
+              <label class="form-label" for="profile-username">Username</label>
+              <input type="text" id="profile-username" class="form-control" placeholder="johndoe" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+              <label class="form-label" for="profile-email">Email Address</label>
+              <input type="email" id="profile-email" class="form-control" placeholder="name@domain.com" required>
+            </div>
+
+            <!-- Submit details -->
+            <button type="submit" class="btn btn-primary" id="details-submit-btn" style="margin-top: 10px;">
+              Save Details
+            </button>
+          </form>
+        </div>
+
+        <!-- Security password alteration form -->
+        <div class="card" id="profile-security-card">
+          <h2 class="card-title">
+            <span>Security Settings</span>
+            <i class="fa-solid fa-shield-halved"></i>
+          </h2>
+
+          <form id="profile-security-form">
+            <!-- New Password -->
+            <div class="form-group">
+              <label class="form-label" for="profile-password">New Password</label>
+              <input type="password" id="profile-password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <!-- Confirm New Password -->
+            <div class="form-group">
+              <label class="form-label" for="profile-confirm-password">Confirm New Password</label>
+              <input type="password" id="profile-confirm-password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <!-- Submit security -->
+            <button type="submit" class="btn btn-primary" id="security-submit-btn" style="margin-top: 10px;">
+              Change Password
+            </button>
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 ApexCurrency Platform. Build for resume portfolio. Powered by ExchangeRate-API.</p>
+    </div>
+  </footer>
+
+  <!-- Custom Scripts -->
+  <script src="/js/api.js"></script>
+  <script src="/js/profile.js"></script>
+</body>
+</html>
