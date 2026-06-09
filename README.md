@@ -158,6 +158,3 @@ The application is deployed as a single Web Service on **Render**, communicating
 
 ---
 
-## 9. License
-
-This project is licensed under the [MIT License](LICENSE). You are free to modify and utilize this project for personal portfolios or educational evaluations.
